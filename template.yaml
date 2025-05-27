@@ -21,8 +21,14 @@ Resources:
       Environment:
         Variables:
           JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+          SECRET_KEY: S3CR3T
+          LOG_LEVEL: TRACE
+          REGION_NAME: us-west-1
+          DB_URL: http://192.168.0.44:8000
+          ACCESS_KEY_ID: X
+          SECRET_ACCESS_KEY: X
       Events:
-        HelloWorld:
+        FoodTracker:
           Type: Api
           Properties:
             Path: /{proxy+}

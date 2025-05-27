@@ -1,4 +1,4 @@
 package com.eliascanalesnieto.config;
 
-public record AppConfig(CryptoConfig crypto) {
+public record AppConfig(CryptoConfig crypto, DynamoDBConfig dynamo) {
 }
