@@ -4,7 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -16,11 +23,15 @@ class AppConfigTest {
 
     @Test
     void checkParams() {
-        assertEquals(
-                new AppConfig(new CryptoConfig("E/bl0m55SLr1CFpHawud7nqV4oflUIi5PlEEy0RFAxI=", 2),
-                        new DynamoDBConfig("http", "food")),
-                appConfig
-        );
+        assertThat(appConfig)
+                .usingRecursiveComparison()
+                .ignoringFields("dynamo.endpoint")
+                .isEqualTo(
+                        new AppConfig(
+                                new CryptoConfig("E/bl0m55SLr1CFpHawud7nqV4oflUIi5PlEEy0RFAxI=", 2),
+                                new DynamoDBConfig("http", "food-tracker", "food-tracker-v2")
+                        )
+                );
     }
 
 }

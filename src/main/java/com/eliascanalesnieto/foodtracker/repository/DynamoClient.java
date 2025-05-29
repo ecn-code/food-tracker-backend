@@ -33,6 +33,10 @@ public class DynamoClient {
     }
 
     public <T> DynamoDbTable<T> createTable(final TableSchema<T> tableSchema) {
-        return enhancedClient.table(dynamoDBConfig.tableName(), tableSchema);
+        return createTable(dynamoDBConfig.tableName(), tableSchema);
+    }
+
+    public <T> DynamoDbTable<T> createTable(final String tableName, final TableSchema<T> tableSchema) {
+        return enhancedClient.table(tableName, tableSchema);
     }
 }

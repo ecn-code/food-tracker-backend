@@ -1,7 +1,10 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
+import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.entity.UserDynamo;
 import com.eliascanalesnieto.foodtracker.entity.UserOldDynamo;
+import com.eliascanalesnieto.foodtracker.service.EncryptService;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -10,12 +13,16 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
+import java.util.Base64;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MigrationRepository {
 
     private final DynamoClient dynamoClient;
+    private final AppConfig appConfig;
+    private final EncryptService encryptService;
 
     public void migrateUsers() {
         final DynamoDbTable<UserDynamo> table = dynamoClient.createTable(UserDynamo.TABLE_SCHEMA);
@@ -26,7 +33,7 @@ public class MigrationRepository {
         }
 
         log.debug("Migrating users");
-        final DynamoDbTable<UserOldDynamo> oldTable = dynamoClient.createTable(UserOldDynamo.TABLE_SCHEMA);
+        final DynamoDbTable<UserOldDynamo> oldTable = dynamoClient.createTable(appConfig.dynamo().oldTableName(), UserOldDynamo.TABLE_SCHEMA);
 
         Key key = Key.builder()
                 .partitionValue("user")
@@ -40,7 +47,6 @@ public class MigrationRepository {
                 final UserDynamo u = new UserDynamo();
                 u.setType(UserDynamo.KEY.partitionKeyValue().s());
                 u.setUsername(user.getSk());
-                u.setLastCode(user.getPassword());
                 table.putItem(u);
             }
         });

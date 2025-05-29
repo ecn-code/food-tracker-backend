@@ -34,9 +34,9 @@ public class AuthorizationService {
     }
 
     public LoginResponse createToken(final UserLogin userLogin) throws LoginException {
-        log.debug("Creating token for {} : {}", userLogin.username(), encryptService.encrypt(key, userLogin.password()));
+        log.debug("Login user: {} - {}", userLogin.username(), encryptService.encrypt(key, userLogin.password()));
 
-        final UserDynamo userDynamo = userRepository.get(userLogin.username(), userLogin.password())
+        final UserDynamo userDynamo = userRepository.get(userLogin.username(), encryptService.encrypt(key, userLogin.password()))
                 .orElseThrow(LoginException::new);
 
         /* TODO: Remove password

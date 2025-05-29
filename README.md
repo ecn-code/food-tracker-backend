@@ -1,6 +1,13 @@
-# food-tracker-backend-2
+# Food Tracker
 
-```bash
-food-tracker-backend$ sam build
-food-tracker-backend$ sam local start-api --host 0.0.0.0 -p <PORT>
+### App
+```
+sam build
+sam local start-api --host 0.0.0.0 -p <PORT>
+```
+
+### Dynamo client
+```
+export DYNAMO_ENDPOINT=http://localhost:<PORT>
+dynamodb-admin
 ```

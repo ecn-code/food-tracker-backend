@@ -1,0 +1,19 @@
+{
+  "food-tracker-v2": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {
+            "S": "USERV2"
+          },
+          "SK": {
+            "S": "username"
+          },
+          "last_code": {
+            "S": "k5Yi3kQHYhQtvAFwajG8JNP05zPD0eT6dVspazOunM8="
+          }
+        }
+      }
+    }
+  ]
+}
