@@ -1,9 +1,10 @@
-package com.eliascanalesnieto.config;
+package com.eliascanalesnieto.foodtracker.config;
 
-import com.eliascanalesnieto.dto.in.UserLogin;
+import com.eliascanalesnieto.foodtracker.dto.in.UserLogin;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Import(MockConfig.class)
 class AuthorizationToUserLoginConverterTest {
 
     @Autowired

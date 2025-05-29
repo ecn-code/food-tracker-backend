@@ -1,6 +1,6 @@
-package com.eliascanalesnieto.config;
+package com.eliascanalesnieto.foodtracker.config;
 
-import com.eliascanalesnieto.dto.in.UserLogin;
+import com.eliascanalesnieto.foodtracker.dto.in.UserLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ public class AuthorizationToUserLoginConverter implements Converter<String, Opti
         return Optional.empty();
     }
 
-    private String base64ToText(String base64) {
+    private String base64ToText(final String base64) {
         try {
             return new String(Base64.getDecoder().decode(base64));
         } catch (Exception e) {

@@ -1,6 +1,6 @@
-package com.eliascanalesnieto.controller;
+package com.eliascanalesnieto.foodtracker.controller;
 
-import com.eliascanalesnieto.repository.DynamoDBClient;
+import com.eliascanalesnieto.foodtracker.repository.MigrationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MigrationController {
 
-    private final DynamoDBClient dynamoDBClient;
+    private final MigrationRepository migrationRepository;
 
     @GetMapping("/users")
     public void users() {
-        log.debug("Migrating users");
+        migrationRepository.migrateUsers();
     }
 
 }

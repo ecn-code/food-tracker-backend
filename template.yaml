@@ -10,7 +10,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .
-      Handler: com.eliascanalesnieto.controller.LambdaHandler::handleRequest
+      Handler: com.eliascanalesnieto.foodtracker.controller.LambdaHandler::handleRequest
       Runtime: java21
       AutoPublishAlias: production
       SnapStart:

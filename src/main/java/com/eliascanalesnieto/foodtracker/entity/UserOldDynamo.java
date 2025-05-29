@@ -1,4 +1,4 @@
-package com.eliascanalesnieto.entity;
+package com.eliascanalesnieto.foodtracker.entity;
 
 import lombok.Setter;
 import lombok.ToString;
@@ -11,9 +11,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @DynamoDbBean
 @ToString
 @Setter
-public class UserDynamo {
+public class UserOldDynamo {
 
-    public static final TableSchema<UserDynamo> TABLE_SCHEMA = TableSchema.fromBean(UserDynamo.class);
+    public static final TableSchema<UserOldDynamo> TABLE_SCHEMA = TableSchema.fromBean(UserOldDynamo.class);
 
     private String pk;
     private String sk;

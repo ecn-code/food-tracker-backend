@@ -1,4 +1,4 @@
-package com.eliascanalesnieto.config;
+package com.eliascanalesnieto.foodtracker.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
