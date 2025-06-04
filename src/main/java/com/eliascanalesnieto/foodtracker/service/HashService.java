@@ -7,9 +7,9 @@ import java.security.Key;
 import java.util.Base64;
 
 @Service
-public class EncryptService {
+public class HashService {
 
-    public String encrypt(final Key key, final String message) {
+    public String hash(final Key key, final String message) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(key);

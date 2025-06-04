@@ -3,8 +3,7 @@ package com.eliascanalesnieto.foodtracker.repository;
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.entity.UserDynamo;
 import com.eliascanalesnieto.foodtracker.entity.UserOldDynamo;
-import com.eliascanalesnieto.foodtracker.service.EncryptService;
-import io.jsonwebtoken.security.Keys;
+import com.eliascanalesnieto.foodtracker.service.HashService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -13,8 +12,6 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
-import java.util.Base64;
-
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -22,7 +19,7 @@ public class MigrationRepository {
 
     private final DynamoClient dynamoClient;
     private final AppConfig appConfig;
-    private final EncryptService encryptService;
+    private final HashService hashService;
 
     public void migrateUsers() {
         final DynamoDbTable<UserDynamo> table = dynamoClient.createTable(UserDynamo.TABLE_SCHEMA);

@@ -35,6 +35,17 @@ public class UserRepository {
                 .findFirst();
     }
 
+    public Optional<UserDynamo> get(final String username) {
+        return dynamoDbTable.query(r -> r
+                        .queryConditional(QueryConditional.keyEqualTo(
+                                UserDynamo.KEY.toBuilder().sortValue(username).build())
+                        )
+                )
+                .stream()
+                .flatMap(page -> page.items().stream())
+                .findFirst();
+    }
+
     public void update(final UserDynamo userDynamo) {
         dynamoDbTable.updateItem(userDynamo);
     }
