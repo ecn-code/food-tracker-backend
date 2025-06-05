@@ -12,15 +12,15 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @Setter
 @ToString
 @DynamoDbBean
-public class UserDynamo {
+public class WeeklyMenuDynamo {
 
-    public static final TableSchema<UserDynamo> TABLE_SCHEMA = TableSchema.fromBean(UserDynamo.class);
-    public static final Key KEY = Key.builder().partitionValue("USER_V2").build();
+    public static final TableSchema<WeeklyMenuDynamo> TABLE_SCHEMA = TableSchema.fromBean(WeeklyMenuDynamo.class);
+    public static final Key KEY = Key.builder().partitionValue("WEEKLY_MENU_V2").build();
 
     private String type;
+    private String yearWeek;
     private String username;
-    private String chatId;
-    private String lastCode;
+    private WeeklyMenuDataDynamo data;
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("PK")
@@ -30,17 +30,19 @@ public class UserDynamo {
 
     @DynamoDbSortKey
     @DynamoDbAttribute("SK")
-    public String getUsername() {
-        return username;
+    public String getYearWeekUsername() {
+        return yearWeek + "#" + username;
     }
 
-    @DynamoDbAttribute("chat_id")
-    public String getChatId() {
-        return chatId;
+    @DynamoDbAttribute("data")
+    public WeeklyMenuDataDynamo getData() {
+        return data;
     }
 
-    @DynamoDbAttribute("last_code")
-    public String getLastCode() {
-        return lastCode;
+    public void setYearWeekUsername(final String yearWeekUsername) {
+        final String[] yearWeekUsernameAttrs = yearWeekUsername.split("#");
+        this.yearWeek = yearWeekUsernameAttrs[0];
+        this.username = yearWeekUsernameAttrs[1];
     }
+
 }

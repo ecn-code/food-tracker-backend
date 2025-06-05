@@ -2,8 +2,10 @@ package com.eliascanalesnieto.foodtracker.repository;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.entity.UserDynamo;
-import com.eliascanalesnieto.foodtracker.entity.UserOldDynamo;
+import com.eliascanalesnieto.foodtracker.entity.old.UserOldDynamo;
+import com.eliascanalesnieto.foodtracker.entity.old.WeeklyDynamoOld;
 import com.eliascanalesnieto.foodtracker.service.HashService;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -48,6 +50,23 @@ public class MigrationRepository {
             }
         });
         log.debug("Users migrated");
+    }
+
+    public void migrateWeeklyMenus() {
+        log.debug("Migrating WeeklyMenus");
+        final DynamoDbTable<WeeklyDynamoOld> oldTable = dynamoClient.createTable(appConfig.dynamo().oldTableName(), WeeklyDynamoOld.TABLE_SCHEMA);
+
+        Key key = Key.builder()
+                .partitionValue("weekly_menu#elias")
+                .build();
+
+        PageIterable<WeeklyDynamoOld> results = oldTable.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
+        results.stream().forEach(page -> {
+            for (WeeklyDynamoOld weeklyDynamoOld : page.items()) {
+                log.debug("Migrating " + weeklyDynamoOld);
+            }
+        });
+        log.debug("WeeklyMenus migrated");
     }
 
     private void print(final Key key, final DynamoDbTable<?> table) {

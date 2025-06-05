@@ -20,4 +20,9 @@ public class MigrationController {
         migrationRepository.migrateUsers();
     }
 
+    @GetMapping("/weekly-menus")
+    public void weeklyMenus() {
+        migrationRepository.migrateWeeklyMenus();
+    }
+
 }

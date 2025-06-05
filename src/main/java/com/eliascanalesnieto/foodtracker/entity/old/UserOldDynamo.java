@@ -1,4 +1,4 @@
-package com.eliascanalesnieto.foodtracker.entity;
+package com.eliascanalesnieto.foodtracker.entity.old;
 
 import lombok.Setter;
 import lombok.ToString;
