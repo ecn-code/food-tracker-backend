@@ -4,7 +4,7 @@
       "PutRequest": {
         "Item": {
           "PK": {
-            "S": "USERV2"
+            "S": "USER_V2"
           },
           "SK": {
             "S": "username"
@@ -19,7 +19,7 @@
       "PutRequest": {
         "Item": {
           "PK": {
-            "S": "USERV2"
+            "S": "USER_V2"
           },
           "SK": {
             "S": "manolo"

@@ -1,0 +1,48 @@
+{
+  "food-tracker-v2": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {
+            "S": "UNIT_V2"
+          },
+          "SK": {
+            "S": "1"
+          },
+          "data": {
+            "M": {
+              "short_name": {
+                "S": "kg"
+              },
+              "name": {
+                "S": "kilogram"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {
+            "S": "UNIT_V2"
+          },
+          "SK": {
+            "S": "5"
+          },
+          "data": {
+            "M": {
+              "short_name": {
+                "S": "g"
+              },
+              "name": {
+                "S": "gram"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

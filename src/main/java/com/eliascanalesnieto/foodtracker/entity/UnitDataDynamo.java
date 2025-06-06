@@ -8,24 +8,18 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @Setter
 @ToString
 @DynamoDbBean
-public class NutritionalValueQuantityDynamoDb {
+public class UnitDataDynamo {
 
-    private String unit;
+    private String shortName;
     private String name;
-    private String quantity;
 
     @DynamoDbAttribute("name")
     public String getName() {
         return name;
     }
 
-    @DynamoDbAttribute("quantity")
-    public String getQuantity() {
-        return quantity;
-    }
-
-    @DynamoDbAttribute("unit")
-    public String getUnit() {
-        return unit;
+    @DynamoDbAttribute("short_name")
+    public String getShortName() {
+        return shortName;
     }
 }

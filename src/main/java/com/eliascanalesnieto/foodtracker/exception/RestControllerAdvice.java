@@ -31,4 +31,9 @@ public class RestControllerAdvice {
         return ResponseEntity.notFound().build();
     }
 
+    @ExceptionHandler(UnprocessableContent.class)
+    public ResponseEntity<ErrorResponse> handle(final UnprocessableContent unprocessableContent) {
+        return ResponseEntity.unprocessableEntity().build();
+    }
+
 }

@@ -13,16 +13,16 @@ import java.util.Map;
 @DynamoDbBean
 public class WeeklyMenuDataDynamo {
 
-    private List<NutritionalValueQuantityDynamoDb> nutritionalValues;
-    private Map<String, MenuDynamoDb> menus;
+    private List<NutritionalValueQuantityDynamo> nutritionalValues;
+    private Map<String, MenuDynamo> menus;
 
     @DynamoDbAttribute("menus")
-    public Map<String, MenuDynamoDb> getMenus() {
+    public Map<String, MenuDynamo> getMenus() {
         return menus;
     }
 
     @DynamoDbAttribute("nutritional_values")
-    public List<NutritionalValueQuantityDynamoDb> getNutritionalValues() {
+    public List<NutritionalValueQuantityDynamo> getNutritionalValues() {
         return nutritionalValues;
     }
 }

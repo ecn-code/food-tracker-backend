@@ -6,11 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class MenuDynamoDb {
+public class MenuDynamo {
 
     private Date date;
-    private List<NutritionalValueQuantityDynamoDb> nutritionalValues;
-    private Map<String, List<MenuProductDynamoDb>> products;
+    private List<NutritionalValueQuantityDynamo> nutritionalValues;
+    private Map<String, List<MenuProductDynamo>> products;
 
     @DynamoDbAttribute("date")
     public Date getDate() {
@@ -18,12 +18,12 @@ public class MenuDynamoDb {
     }
 
     @DynamoDbAttribute("nutritional_values")
-    public List<NutritionalValueQuantityDynamoDb> getNutritionalValues() {
+    public List<NutritionalValueQuantityDynamo> getNutritionalValues() {
         return nutritionalValues;
     }
 
     @DynamoDbAttribute("products")
-    public Map<String, List<MenuProductDynamoDb>> getProducts() {
+    public Map<String, List<MenuProductDynamo>> getProducts() {
         return products;
     }
 }

@@ -8,24 +8,24 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @Setter
 @ToString
 @DynamoDbBean
-public class MenuProductDynamoDb {
+public class NutritionalValueQuantityDynamo {
 
+    private String unit;
     private String name;
-    private String recipeName;
-    private Double quantity;
-
-    @DynamoDbAttribute("quantity")
-    public Double getQuantity() {
-        return quantity;
-    }
+    private String quantity;
 
     @DynamoDbAttribute("name")
     public String getName() {
         return name;
     }
 
-    @DynamoDbAttribute("recipe_name")
-    public String getRecipeName() {
-        return recipeName;
+    @DynamoDbAttribute("quantity")
+    public String getQuantity() {
+        return quantity;
+    }
+
+    @DynamoDbAttribute("unit")
+    public String getUnit() {
+        return unit;
     }
 }
