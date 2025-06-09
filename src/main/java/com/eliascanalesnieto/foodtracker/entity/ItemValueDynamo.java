@@ -8,11 +8,11 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @Setter
 @ToString
 @DynamoDbBean
-public class NutritionalValueDynamo {
+public class ItemValueDynamo {
 
     private String unit;
     private String name;
-    private String quantity;
+    private Double quantity;
 
     @DynamoDbAttribute("name")
     public String getName() {
@@ -20,7 +20,7 @@ public class NutritionalValueDynamo {
     }
 
     @DynamoDbAttribute("quantity")
-    public String getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 

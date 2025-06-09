@@ -36,7 +36,8 @@ public class MockConfig {
                 "food-tracker-v2.json",
                 "user-data.json",
                 "unit-data.json",
-                "nutritional-information-data.json"
+                "nutritional-information-data.json",
+                "recipe-data.json"
         };
 
         for (String file : files) {

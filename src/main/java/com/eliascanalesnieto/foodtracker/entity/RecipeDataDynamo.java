@@ -6,19 +6,30 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttri
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
 import java.util.List;
-import java.util.Map;
 
 @Setter
 @ToString
 @DynamoDbBean
-public class WeeklyMenuDataDynamo {
+public class RecipeDataDynamo {
 
+    private String name;
+    private String description;
+    private List<ItemValueDynamo> products;
     private List<ItemValueDynamo> nutritionalValues;
-    private Map<String, MenuDynamo> menus;
 
-    @DynamoDbAttribute("menus")
-    public Map<String, MenuDynamo> getMenus() {
-        return menus;
+    @DynamoDbAttribute("name")
+    public String getName() {
+        return name;
+    }
+
+    @DynamoDbAttribute("description")
+    public String getDescription() {
+        return description;
+    }
+
+    @DynamoDbAttribute("products")
+    public List<ItemValueDynamo> getProducts() {
+        return products;
     }
 
     @DynamoDbAttribute("nutritional_values")

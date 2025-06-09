@@ -1,0 +1,97 @@
+{
+  "food-tracker-v2": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "RECIPE_V2" },
+          "SK": { "S": "1" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Tortilla de patatas" },
+              "description": { "S": "Receta tradicional española" },
+              "products": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Patata" },
+                      "unit": { "S": "g" },
+                      "quantity": { "N": "500" }
+                    }
+                  },
+                  {
+                    "M": {
+                      "name": { "S": "Huevo" },
+                      "unit": { "S": "unidad" },
+                      "quantity": { "N": "4" }
+                    }
+                  }
+                ]
+              },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Calorías" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "800" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "RECIPE_V2" },
+          "SK": { "S": "2" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Tortilla de jamon" },
+              "description": { "S": "Receta tortilla jamon" },
+              "products": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Patata" },
+                      "unit": { "S": "g" },
+                      "quantity": { "N": "500" }
+                    }
+                  },
+                  {
+                    "M": {
+                      "name": { "S": "Huevo" },
+                      "unit": { "S": "unidad" },
+                      "quantity": { "N": "4" }
+                    }
+                  },
+                  {
+                    "M": {
+                      "name": { "S": "Jamon" },
+                      "unit": { "S": "g" },
+                      "quantity": { "N": "40" }
+                    }
+                  }
+                ]
+              },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Calorías" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "800" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
