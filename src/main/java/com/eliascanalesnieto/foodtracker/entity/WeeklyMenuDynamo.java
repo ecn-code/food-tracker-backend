@@ -34,7 +34,7 @@ public class WeeklyMenuDynamo {
         return yearWeek + "#" + username;
     }
 
-    @DynamoDbAttribute("data")
+    @DynamoDbAttribute("additional_data")
     public WeeklyMenuDataDynamo getData() {
         return data;
     }

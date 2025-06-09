@@ -8,7 +8,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @Setter
 @ToString
 @DynamoDbBean
-public class NutritionalValueQuantityDynamo {
+public class NutritionalValueDynamo {
 
     private String unit;
     private String name;

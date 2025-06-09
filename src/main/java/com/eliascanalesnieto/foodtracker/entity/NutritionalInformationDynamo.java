@@ -14,14 +14,14 @@ import java.util.UUID;
 @Setter
 @ToString
 @DynamoDbBean
-public class UnitDynamo {
+public class NutritionalInformationDynamo {
 
-    public static final TableSchema<UnitDynamo> TABLE_SCHEMA = TableSchema.fromBean(UnitDynamo.class);
-    public static final Key KEY = Key.builder().partitionValue("UNIT_V2").build();
+    public static final TableSchema<NutritionalInformationDynamo> TABLE_SCHEMA = TableSchema.fromBean(NutritionalInformationDynamo.class);
+    public static final Key KEY = Key.builder().partitionValue("NUTRITIONAL_INFORMATION_V2").build();
 
     private String type;
     private String id;
-    private UnitDataDynamo data;
+    private NutritionalInformationDataDynamo data;
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("PK")
@@ -36,7 +36,7 @@ public class UnitDynamo {
     }
 
     @DynamoDbAttribute("additional_data")
-    public UnitDataDynamo getData() {
+    public NutritionalInformationDataDynamo getData() {
         return data;
     }
 

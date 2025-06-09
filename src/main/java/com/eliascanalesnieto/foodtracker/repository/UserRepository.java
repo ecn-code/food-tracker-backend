@@ -25,7 +25,7 @@ public class UserRepository {
                                 UserDynamo.KEY.toBuilder().sortValue(username).build())
                         ).filterExpression(
                                 Expression.builder()
-                                        .expression("last_code = :code")
+                                        .expression("additional_data.last_code = :code")
                                         .expressionValues(Map.of(":code", AttributeValue.fromS(code)))
                                         .build()
                         )

@@ -35,7 +35,7 @@ public class AuthorizationService {
     }
 
     public LoginResponse createToken(final UserLogin userLogin) throws LoginException {
-        log.debug("Login user: {} - {}", userLogin.username(), hashService.hash(key, userLogin.password()));
+        log.debug("Login user: {}", userLogin.username());
 
         final UserDynamo userDynamo = userRepository.get(userLogin.username(), hashService.hash(key, userLogin.password()))
                 .orElseThrow(LoginException::new);

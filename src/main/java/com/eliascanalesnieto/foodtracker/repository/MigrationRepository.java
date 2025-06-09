@@ -1,7 +1,10 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
+import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDataDynamo;
+import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDynamo;
 import com.eliascanalesnieto.foodtracker.entity.UserDynamo;
+import com.eliascanalesnieto.foodtracker.entity.old.NutritionalValueOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.UserOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.WeeklyDynamoOld;
 import com.eliascanalesnieto.foodtracker.service.HashService;
@@ -69,6 +72,43 @@ public class MigrationRepository {
         log.debug("WeeklyMenus migrated");
     }
 
+    public void migrateNutritionalValue() {
+        log.debug("Migrating NutritionalValue");
+        final DynamoDbTable<NutritionalInformationDynamo> table = dynamoClient.createTable(NutritionalInformationDynamo.TABLE_SCHEMA);
+        if(exist(NutritionalInformationDynamo.KEY, table)) {
+            log.debug("Not possible to migrate NutritionalValue because they exist");
+            print(NutritionalInformationDynamo.KEY, table);
+            return;
+        }
+
+        final DynamoDbTable<NutritionalValueOldDynamo> oldTable = dynamoClient.createTable(appConfig.dynamo().oldTableName(), NutritionalValueOldDynamo.TABLE_SCHEMA);
+
+        Key key = Key.builder()
+                .partitionValue("nutritional_value")
+                .build();
+
+        PageIterable<NutritionalValueOldDynamo> results = oldTable.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
+        results.stream().forEach(page -> {
+            for (NutritionalValueOldDynamo nutritionalValueOldDynamo : page.items()) {
+
+                final NutritionalInformationDynamo nutritionalInformationDynamo = new NutritionalInformationDynamo();
+                nutritionalInformationDynamo.setId(NutritionalInformationDynamo.createId());
+                nutritionalInformationDynamo.setType(NutritionalInformationDynamo.KEY.partitionKeyValue().s());
+
+                final NutritionalInformationDataDynamo nutritionalInformationDataDynamo = new NutritionalInformationDataDynamo();
+                nutritionalInformationDynamo.setData(nutritionalInformationDataDynamo);
+                nutritionalInformationDataDynamo.setName(nutritionalValueOldDynamo.getName());
+                nutritionalInformationDataDynamo.setShortName(nutritionalValueOldDynamo.getSk());
+                nutritionalInformationDataDynamo.setUnit(nutritionalValueOldDynamo.getUnit());
+
+                table.putItem(nutritionalInformationDynamo);
+
+                log.debug("Migrating " + nutritionalInformationDynamo);
+            }
+        });
+        log.debug("NutritionalValue migrated");
+    }
+
     private void print(final Key key, final DynamoDbTable<?> table) {
         PageIterable<?> results = table.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
 
@@ -84,5 +124,4 @@ public class MigrationRepository {
                 .queryConditional(QueryConditional.keyEqualTo(key))
         ).stream().anyMatch(page -> !page.items().isEmpty());
     }
-
 }

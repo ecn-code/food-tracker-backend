@@ -4,18 +4,21 @@
       "PutRequest": {
         "Item": {
           "PK": {
-            "S": "USER_V2"
+            "S": "NUTRITIONAL_INFORMATION_V2"
           },
           "SK": {
-            "S": "username"
+            "S": "1"
           },
           "additional_data": {
             "M": {
-              "last_code": {
-                "S": "k5Yi3kQHYhQtvAFwajG8JNP05zPD0eT6dVspazOunM8="
+              "short_name": {
+                "S": "kcal"
               },
-              "chat_id": {
-                "S": ""
+              "name": {
+                "S": "Kilocaloría"
+              },
+              "unit": {
+                "S": "kcal"
               }
             }
           }
@@ -26,18 +29,21 @@
       "PutRequest": {
         "Item": {
           "PK": {
-            "S": "USER_V2"
+            "S": "NUTRITIONAL_INFORMATION_V2"
           },
           "SK": {
-            "S": "manolo"
+            "S": "2"
           },
           "additional_data": {
             "M": {
-              "last_code": {
-                "S": "k5Yi3kQHYhQtvAFwajG8JNP05zPD0eT6dVspazOunM8="
+              "short_name": {
+                "S": "prot"
               },
-              "chat_id": {
-                "S": ""
+              "name": {
+                "S": "Proteína"
+              },
+              "unit": {
+                "S": "g"
               }
             }
           }

@@ -9,7 +9,7 @@
           "SK": {
             "S": "1"
           },
-          "data": {
+          "additional_data": {
             "M": {
               "short_name": {
                 "S": "kg"
@@ -31,7 +31,7 @@
           "SK": {
             "S": "5"
           },
-          "data": {
+          "additional_data": {
             "M": {
               "short_name": {
                 "S": "g"

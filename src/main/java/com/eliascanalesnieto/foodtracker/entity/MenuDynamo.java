@@ -9,7 +9,7 @@ import java.util.Map;
 public class MenuDynamo {
 
     private Date date;
-    private List<NutritionalValueQuantityDynamo> nutritionalValues;
+    private List<NutritionalValueDynamo> nutritionalValues;
     private Map<String, List<MenuProductDynamo>> products;
 
     @DynamoDbAttribute("date")
@@ -18,7 +18,7 @@ public class MenuDynamo {
     }
 
     @DynamoDbAttribute("nutritional_values")
-    public List<NutritionalValueQuantityDynamo> getNutritionalValues() {
+    public List<NutritionalValueDynamo> getNutritionalValues() {
         return nutritionalValues;
     }
 

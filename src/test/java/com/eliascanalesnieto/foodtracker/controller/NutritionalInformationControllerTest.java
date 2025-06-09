@@ -2,10 +2,10 @@ package com.eliascanalesnieto.foodtracker.controller;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.config.MockConfig;
-import com.eliascanalesnieto.foodtracker.dto.in.UnitRequest;
+import com.eliascanalesnieto.foodtracker.dto.in.NutritionalInformationRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.LoginResponse;
-import com.eliascanalesnieto.foodtracker.dto.out.UnitResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.NutritionalInformationResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(MockConfig.class)
-class UnitControllerTest {
+class NutritionalInformationControllerTest {
 
     private static final String LOGIN = "/users/login";
-    private static final String UNITS = "/units";
+    private static final String NUTRITIONAL_INFORMATION = "/nutritional-information";
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -41,8 +41,8 @@ class UnitControllerTest {
 
     @Test
     void getAll() {
-        ResponseEntity<List<UnitResponse>> response = testRestTemplate.exchange(
-                UNITS,
+        ResponseEntity<List<NutritionalInformationResponse>> response = testRestTemplate.exchange(
+                NUTRITIONAL_INFORMATION,
                 HttpMethod.GET,
                 login(),
                 new ParameterizedTypeReference<>() {
@@ -54,8 +54,8 @@ class UnitControllerTest {
                 .usingRecursiveComparison()
                 .isEqualTo(
                         List.of(
-                                new UnitResponse("1", "kg", "kilogram"),
-                                new UnitResponse("5", "g", "gram")
+                                new NutritionalInformationResponse("1", "kcal", "Kilocaloría", "kcal"),
+                                new NutritionalInformationResponse("2", "prot", "Proteína", "g")
                         )
                 );
     }
@@ -63,8 +63,8 @@ class UnitControllerTest {
     @Test
     void getOne() {
         final String id = "1";
-        ResponseEntity<UnitResponse> response = testRestTemplate.exchange(
-                UNITS + "/" + id,
+        ResponseEntity<NutritionalInformationResponse> response = testRestTemplate.exchange(
+                NUTRITIONAL_INFORMATION + "/" + id,
                 HttpMethod.GET,
                 login(),
                 new ParameterizedTypeReference<>() {
@@ -74,14 +74,14 @@ class UnitControllerTest {
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertThat(response.getBody())
                 .usingRecursiveComparison()
-                .isEqualTo(new UnitResponse(id, "kg", "kilogram"));
+                .isEqualTo(new NutritionalInformationResponse(id, "kcal", "Kilocaloría", "kcal"));
     }
 
     @Test
     void getOneDoesNotExist() {
         final String id = "8";
         ResponseEntity<ErrorResponse> response = testRestTemplate.exchange(
-                UNITS + "/" + id,
+                NUTRITIONAL_INFORMATION + "/" + id,
                 HttpMethod.GET,
                 login(),
                 new ParameterizedTypeReference<>() {
@@ -96,11 +96,12 @@ class UnitControllerTest {
     void create() {
         final String kg = "kg";
         final String kilogram = "kilogram";
+        final String kcal = "kcal";
 
-        ResponseEntity<UnitResponse> response = testRestTemplate.exchange(
-                UNITS,
+        ResponseEntity<NutritionalInformationResponse> response = testRestTemplate.exchange(
+                NUTRITIONAL_INFORMATION,
                 HttpMethod.POST,
-                login(new UnitRequest(null, kg, kilogram)),
+                login(new NutritionalInformationRequest(null, kg, kilogram, kcal)),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -109,10 +110,10 @@ class UnitControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo( new UnitResponse(null, kg, kilogram));
+                .isEqualTo( new NutritionalInformationResponse(null, kg, kilogram, kcal));
 
         testRestTemplate.exchange(
-                UNITS + "/" + response.getBody().id(),
+                NUTRITIONAL_INFORMATION + "/" + response.getBody().id(),
                 HttpMethod.DELETE,
                 login(),
                 new ParameterizedTypeReference<>() {
@@ -123,9 +124,9 @@ class UnitControllerTest {
     @Test
     void createWithId() {
         ResponseEntity<ErrorResponse> response = testRestTemplate.exchange(
-                UNITS,
+                NUTRITIONAL_INFORMATION,
                 HttpMethod.POST,
-                login(new UnitRequest("55", "kg", "kilogram")),
+                login(new NutritionalInformationRequest("55", "kg", "kilogram", "kcal")),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -136,9 +137,9 @@ class UnitControllerTest {
     @Test
     void createWithoutShortName() {
         ResponseEntity<ErrorResponse> response = testRestTemplate.exchange(
-                UNITS,
+                NUTRITIONAL_INFORMATION,
                 HttpMethod.POST,
-                login(new UnitRequest(null, null, "kilogram")),
+                login(new NutritionalInformationRequest(null, null, "kilogram", "kcal")),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -153,11 +154,12 @@ class UnitControllerTest {
         final String id = "1";
         final String kg = "2kg";
         final String kilogram = "kilogram";
+        final String kcal = "kcal";
 
-        ResponseEntity<UnitResponse> response = testRestTemplate.exchange(
-                UNITS + "/" + id,
+        ResponseEntity<NutritionalInformationResponse> response = testRestTemplate.exchange(
+                NUTRITIONAL_INFORMATION + "/" + id,
                 HttpMethod.PUT,
-                login(new UnitRequest(id, kg, kilogram)),
+                login(new NutritionalInformationRequest(id, kg, kilogram, kcal)),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -165,12 +167,12 @@ class UnitControllerTest {
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertThat(response.getBody())
                 .usingRecursiveComparison()
-                .isEqualTo( new UnitResponse(id, kg, kilogram));
+                .isEqualTo( new NutritionalInformationResponse(id, kg, kilogram, kcal));
 
         testRestTemplate.exchange(
-                UNITS + "/" + id,
+                NUTRITIONAL_INFORMATION + "/" + id,
                 HttpMethod.PUT,
-                login(new UnitRequest(id, "kg", kilogram)),
+                login(new NutritionalInformationRequest(id, "kg", kilogram, kcal)),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -180,11 +182,12 @@ class UnitControllerTest {
     void updateWithoutId() {
         final String kg = "2kg";
         final String kilogram = "kilogram";
+        final String kcal = "kcal";
 
         ResponseEntity<ErrorResponse> response = testRestTemplate.exchange(
-                UNITS + "/",
+                NUTRITIONAL_INFORMATION + "/",
                 HttpMethod.PUT,
-                login(new UnitRequest(null, kg, kilogram)),
+                login(new NutritionalInformationRequest(null, kg, kilogram, kcal)),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -198,11 +201,12 @@ class UnitControllerTest {
         final String id = "1";
         final String kg = "2kg";
         final String kilogram = "kilogram";
+        final String kcal = "kcal";
 
         ResponseEntity<ErrorResponse> response = testRestTemplate.exchange(
-                UNITS + "/" + id,
+                NUTRITIONAL_INFORMATION + "/" + id,
                 HttpMethod.PUT,
-                login(new UnitRequest("2", kg, kilogram)),
+                login(new NutritionalInformationRequest("2", kg, kilogram, kcal)),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -215,11 +219,12 @@ class UnitControllerTest {
     void updateWithoutShortname() {
         final String id = "1";
         final String kilogram = "kilogram";
+        final String kcal = "kcal";
 
         ResponseEntity<ErrorResponse> response = testRestTemplate.exchange(
-                UNITS + "/" + id,
+                NUTRITIONAL_INFORMATION + "/" + id,
                 HttpMethod.PUT,
-                login(new UnitRequest(id, null, kilogram)),
+                login(new NutritionalInformationRequest(id, null, kilogram, kcal)),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -232,7 +237,7 @@ class UnitControllerTest {
         return login(null);
     }
 
-    private HttpEntity login(final UnitRequest unitRequest) {
+    private HttpEntity login(final NutritionalInformationRequest NutritionalInformationRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic %s".formatted(Base64.getEncoder().encodeToString("username:password".getBytes(StandardCharsets.UTF_8))));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -250,7 +255,7 @@ class UnitControllerTest {
         headers.set("Authorization", "Bearer %s".formatted(loginResponse.getBody().token()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new HttpEntity<>(unitRequest, headers);
+        return new HttpEntity<>(NutritionalInformationRequest, headers);
     }
 
 }

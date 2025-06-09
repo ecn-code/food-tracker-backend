@@ -19,8 +19,7 @@ public class UserDynamo {
 
     private String type;
     private String username;
-    private String chatId;
-    private String lastCode;
+    private UserDataDynamo data;
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("PK")
@@ -34,13 +33,8 @@ public class UserDynamo {
         return username;
     }
 
-    @DynamoDbAttribute("chat_id")
-    public String getChatId() {
-        return chatId;
-    }
-
-    @DynamoDbAttribute("last_code")
-    public String getLastCode() {
-        return lastCode;
+    @DynamoDbAttribute("additional_data")
+    public UserDataDynamo getData() {
+        return data;
     }
 }

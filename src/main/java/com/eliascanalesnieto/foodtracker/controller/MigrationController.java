@@ -25,4 +25,9 @@ public class MigrationController {
         migrationRepository.migrateWeeklyMenus();
     }
 
+    @GetMapping("/nutritional-value")
+    public void nutritionalValue() {
+        migrationRepository.migrateNutritionalValue();
+    }
+
 }

@@ -32,7 +32,12 @@ public class MockConfig {
                 .withServices(LocalStackContainer.Service.DYNAMODB)
                 .waitingFor(Wait.forLogMessage(".*Executed init-dynamodb.sh.*", 1));
 
-        String[] files = { "food-tracker-v2.json", "user-data.json", "unit-data.json" };
+        String[] files = {
+                "food-tracker-v2.json",
+                "user-data.json",
+                "unit-data.json",
+                "nutritional-information-data.json"
+        };
 
         for (String file : files) {
             localStackContainer.withCopyFileToContainer(
