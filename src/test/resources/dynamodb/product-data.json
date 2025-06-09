@@ -1,0 +1,56 @@
+{
+  "food-tracker-v2": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "PRODUCT_V2" },
+          "SK": { "S": "1" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Leche" },
+              "description": { "S": "Leche entera de vaca" },
+              "recipe_id": { "S": "" },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Calorías" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "60" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "PRODUCT_V2" },
+          "SK": { "S": "2" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Pan" },
+              "description": { "S": "Pan integral" },
+              "recipe_id": { "S": "1" },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Calorías" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "250" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

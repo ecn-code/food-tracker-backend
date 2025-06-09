@@ -37,7 +37,8 @@ public class MockConfig {
                 "user-data.json",
                 "unit-data.json",
                 "nutritional-information-data.json",
-                "recipe-data.json"
+                "recipe-data.json",
+                "product-data.json"
         };
 
         for (String file : files) {
