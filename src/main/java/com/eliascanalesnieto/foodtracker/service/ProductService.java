@@ -51,7 +51,7 @@ public class ProductService {
         productRepository.delete(id);
     }
 
-    private ProductResponse toResponse(ProductDynamo productDynamo) {
+    private ProductResponse toResponse(final ProductDynamo productDynamo) {
         var data = productDynamo.getData();
         return new ProductResponse(
                 productDynamo.getId(),
@@ -60,7 +60,7 @@ public class ProductService {
                 data.getRecipeId(),
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                            .map(iv -> new ItemValueResponse(iv.getName(), iv.getUnit(), iv.getQuantity()))
+                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
                             .collect(Collectors.toList())
                         : null
         );

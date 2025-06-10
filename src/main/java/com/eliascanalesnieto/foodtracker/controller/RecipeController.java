@@ -31,13 +31,13 @@ public class RecipeController {
     }
 
     @PostMapping
-    public RecipeResponse post(@Auth final User currentUser, @RequestBody final RecipeRequest recipeRequest) throws UnprocessableContent {
+    public RecipeResponse post(@Auth final User currentUser, @RequestBody final RecipeRequest recipeRequest) throws UnprocessableContent, EntityNotFoundException {
         validate(recipeRequest);
         return recipeService.post(recipeRequest);
     }
 
     @PutMapping("/{id}")
-    public RecipeResponse put(@Auth final User currentUser, @PathVariable final String id, @RequestBody final RecipeRequest recipeRequest) throws UnprocessableContent {
+    public RecipeResponse put(@Auth final User currentUser, @PathVariable final String id, @RequestBody final RecipeRequest recipeRequest) throws UnprocessableContent, EntityNotFoundException {
         validate(recipeRequest);
         return recipeService.put(id, recipeRequest);
     }

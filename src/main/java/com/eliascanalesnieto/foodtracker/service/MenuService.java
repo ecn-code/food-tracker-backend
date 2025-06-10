@@ -67,14 +67,14 @@ public class MenuService {
                                 Map.Entry::getKey,
                                 e -> e.getValue() != null
                                     ? e.getValue().stream()
-                                        .map(iv -> new ItemValueResponse(iv.getName(), iv.getUnit(), iv.getQuantity()))
+                                        .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
                                         .collect(Collectors.toList())
                                     : null
                             ))
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                            .map(iv -> new ItemValueResponse(iv.getName(), iv.getUnit(), iv.getQuantity()))
+                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
                             .collect(Collectors.toList())
                         : null
         );

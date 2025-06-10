@@ -114,8 +114,8 @@ class MenuControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(new MenuResponse("2025-10-10", "name",
-                        Map.of("Almuerzo", List.of(new ItemValueResponse("p1", "portions", 5d))),
-                        List.of(new ItemValueResponse("ni", "g", 3d))));
+                        Map.of("Almuerzo", List.of(new ItemValueResponse("1", "p1", "portions", 5d))),
+                        List.of(new ItemValueResponse("1", "ni", "g", 3d))));
 
         final ResponseEntity<Object> delete = testRestTemplate.exchange(
                 MENUS + "/" + IdFormat.format(response.getBody().date(), response.getBody().username()),
@@ -161,8 +161,8 @@ class MenuControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(new MenuResponse(yyyyMMdd, username,
-                        Map.of("Cena", List.of(new ItemValueResponse("p1", "portions", 5d))),
-                        List.of(new ItemValueResponse("ni", "g", 3d))));
+                        Map.of("Cena", List.of(new ItemValueResponse("1", "p1", "portions", 5d))),
+                        List.of(new ItemValueResponse("1", "ni", "g", 3d))));
 
         testRestTemplate.exchange(
                 MENUS + "/" + date + "#" + username,
@@ -250,17 +250,18 @@ class MenuControllerTest {
     @SneakyThrows
     private static MenuResponse getMenu2() {
         return new MenuResponse("2025-12-12", "user",
-                Map.of("Cena", List.of(new ItemValueResponse("Patata", "g", 500d),
-                        new ItemValueResponse("Huevo", "unidad", 4d),
-                        new ItemValueResponse("Jamon", "g", 40d))),
-                List.of(new ItemValueResponse("Calorías", "kcal", 800d)));
+                Map.of("Cena", List.of(new ItemValueResponse("1", "Patata", "g", 500d),
+                        new ItemValueResponse("2", "Huevo", "unidad", 4d),
+                        new ItemValueResponse("3", "Jamon", "g", 40d))),
+                List.of(new ItemValueResponse("1", "Calorías", "kcal", 800d)));
     }
 
     @SneakyThrows
     private static MenuResponse getMenu1() {
         return new MenuResponse("2025-01-12", "user3",
-                Map.of("Almuerzo", List.of(new ItemValueResponse("Patata", "g", 500d), new ItemValueResponse("Huevo", "unidad", 4d))),
-                List.of(new ItemValueResponse("Calorías", "kcal", 800d)));
+                Map.of("Almuerzo", List.of(new ItemValueResponse("1", "Patata", "g", 500d),
+                        new ItemValueResponse("2", "Huevo", "unidad", 4d))),
+                List.of(new ItemValueResponse("1", "Calorías", "kcal", 800d)));
     }
 
     private static MenuRequest getMenuRequest(final Date date, final String username) {
@@ -268,8 +269,8 @@ class MenuControllerTest {
     }
 
     private static MenuRequest getMenuRequest(final Date date, final String username, final String partDay) {
-        final Map<String, List<ItemValueRequest>> products = Map.of(partDay, List.of(new ItemValueRequest("p1", "portions", 5d)));
-        final List<ItemValueRequest> nutritionalValues = List.of(new ItemValueRequest("ni", "g", 3d));
+        final Map<String, List<ItemValueRequest>> products = Map.of(partDay, List.of(new ItemValueRequest("1", "p1", "portions", 5d)));
+        final List<ItemValueRequest> nutritionalValues = List.of(new ItemValueRequest("1", "ni", "g", 3d));
 
         return new MenuRequest(date, username, products, nutritionalValues);
     }

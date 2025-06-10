@@ -109,9 +109,9 @@ class RecipeControllerTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new RecipeResponse(null, "name", "Receta tradicional española",
-                        List.of(new ItemValueResponse("Patata", "g", 500d),
-                                new ItemValueResponse("Huevo", "unidad", 4d)),
-                        List.of(new ItemValueResponse("Calorías", "kcal", 800d))));
+                        List.of(new ItemValueResponse("1", "Patata", "g", 500d),
+                                new ItemValueResponse("2", "Huevo", "unidad", 4d)),
+                        List.of(new ItemValueResponse("1", "Calorías", "kcal", 310d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -168,9 +168,9 @@ class RecipeControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(new RecipeResponse(id, name + "-m", "Receta tradicional española",
-                        List.of(new ItemValueResponse("Patata", "g", 500d),
-                                new ItemValueResponse("Huevo", "unidad", 4d)),
-                        List.of(new ItemValueResponse("Calorías", "kcal", 800d))));
+                        List.of(new ItemValueResponse("1", "Patata", "g", 500d),
+                                new ItemValueResponse("2", "Huevo", "unidad", 4d)),
+                        List.of(new ItemValueResponse("1", "Calorías", "kcal", 310d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + id,
@@ -257,23 +257,23 @@ class RecipeControllerTest {
 
     private static RecipeResponse getRecipe2() {
         return new RecipeResponse("2", "Tortilla de jamon", "Receta tortilla jamon",
-                List.of(new ItemValueResponse("Patata", "g", 500d),
-                        new ItemValueResponse("Huevo", "unidad", 4d),
-                        new ItemValueResponse("Jamon", "g", 40d)),
-                List.of(new ItemValueResponse("Calorías", "kcal", 800d)));
+                List.of(new ItemValueResponse("1", "Patata", "g", 500d),
+                        new ItemValueResponse("2", "Huevo", "unidad", 4d),
+                        new ItemValueResponse("3", "Jamon", "g", 40d)),
+                List.of(new ItemValueResponse("1", "Calorías", "kcal", 800d)));
     }
 
     private static RecipeResponse getRecipe1() {
         return new RecipeResponse("1", "Tortilla de patatas", "Receta tradicional española",
-                List.of(new ItemValueResponse("Patata", "g", 500d), new ItemValueResponse("Huevo", "unidad", 4d)),
-                List.of(new ItemValueResponse("Calorías", "kcal", 800d)));
+                List.of(new ItemValueResponse("1", "Patata", "g", 500d),
+                        new ItemValueResponse("2", "Huevo", "unidad", 4d)),
+                List.of(new ItemValueResponse("1", "Calorías", "kcal", 800d)));
     }
 
     private static RecipeRequest getRecipeRequest(final String id, final String name) {
         return new RecipeRequest(id, name, "Receta tradicional española",
-                List.of(new ItemValueRequest("Patata", "g", 500d),
-                        new ItemValueRequest("Huevo", "unidad", 4d)),
-                List.of(new ItemValueRequest("Calorías", "kcal", 800d)));
+                List.of(new ItemValueRequest("1", "Patata", "g", 500d),
+                        new ItemValueRequest("2", "Huevo", "unidad", 4d)));
     }
 
 }

@@ -109,7 +109,7 @@ class ProductControllerTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new ProductResponse(null, "name", "desc", "",
-                        List.of(new ItemValueResponse("ni", "g", 3d))));
+                        List.of(new ItemValueResponse("1", "ni", "g", 3d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -152,12 +152,23 @@ class ProductControllerTest {
     @Test
     void update() {
         final String id = "1";
-        final String name = "product 1";
+
+        ResponseEntity<ProductResponse> toUpdate = testRestTemplate.exchange(
+                RECIPES + "/" + id,
+                HttpMethod.GET,
+                login(),
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        ProductResponse product = toUpdate.getBody();
 
         ResponseEntity<ProductResponse> response = testRestTemplate.exchange(
                 RECIPES + "/" + id,
                 HttpMethod.PUT,
-                login(getProductRequest(id, name + "-m")),
+                login(new ProductRequest(product.id(), product.name() + "-m", product.description(), product.recipeId(),
+                        product.nutritionalValues().stream()
+                                .map(i -> new ItemValueRequest(i.id(), i.name(), i.unit(), i.value()))
+                                .toList())),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -165,13 +176,15 @@ class ProductControllerTest {
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertThat(response.getBody())
                 .usingRecursiveComparison()
-                .isEqualTo(new ProductResponse(id, name + "-m", "desc", "",
-                        List.of(new ItemValueResponse("ni", "g", 3d))));
+                .isEqualTo(new ProductResponse(id, product.name() + "-m", product.description(), product.recipeId(), product.nutritionalValues()));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + id,
                 HttpMethod.PUT,
-                login(getProductRequest(id, name)),
+                login(new ProductRequest(product.id(), product.name(), product.description(), product.recipeId(),
+                        product.nutritionalValues().stream()
+                                .map(i -> new ItemValueRequest(i.id(), i.name(), i.unit(), i.value()))
+                                .toList())),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -253,17 +266,17 @@ class ProductControllerTest {
 
     private static ProductResponse getProduct2() {
         return new ProductResponse("2", "Pan", "Pan integral", "1",
-                List.of(new ItemValueResponse("Calorías", "kcal", 250d)));
+                List.of(new ItemValueResponse("1", "Calorías", "kcal", 250d)));
     }
 
     private static ProductResponse getProduct1() {
         return new ProductResponse("1", "Leche", "Leche entera de vaca", "",
-                List.of(new ItemValueResponse("Calorías", "kcal", 60d)));
+                List.of(new ItemValueResponse("1", "Calorías", "kcal", 60d)));
     }
 
     private static ProductRequest getProductRequest(final String id, final String name) {
         final String description = "desc";
-        final List<ItemValueRequest> nutritionalValues = List.of(new ItemValueRequest("ni", "g", 3d));
+        final List<ItemValueRequest> nutritionalValues = List.of(new ItemValueRequest("1", "ni", "g", 3d));
 
         return new ProductRequest(id, name, description, "", nutritionalValues);
     }

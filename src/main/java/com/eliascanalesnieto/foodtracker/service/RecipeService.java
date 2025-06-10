@@ -1,24 +1,34 @@
 package com.eliascanalesnieto.foodtracker.service;
 
+import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.RecipeRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ItemValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.RecipeResponse;
+import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
+import com.eliascanalesnieto.foodtracker.entity.ProductDataDynamo;
+import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
+import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.Recipe;
+import com.eliascanalesnieto.foodtracker.repository.ProductRepository;
 import com.eliascanalesnieto.foodtracker.repository.RecipeRepository;
+import com.eliascanalesnieto.foodtracker.utils.NutritionalValueCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final ProductRepository productRepository;
 
     public List<RecipeResponse> get() {
         return recipeRepository.get().stream()
@@ -31,19 +41,20 @@ public class RecipeService {
         return toResponse(recipeDynamo);
     }
 
-    public RecipeResponse post(final RecipeRequest recipeRequest) throws UnprocessableContent {
+    public RecipeResponse post(final RecipeRequest recipeRequest) throws UnprocessableContent, EntityNotFoundException {
         if (StringUtils.hasText(recipeRequest.id())) {
             throw new UnprocessableContent();
         }
-        final RecipeDynamo recipeDynamo = recipeRepository.create(recipeRequest);
+
+        final RecipeDynamo recipeDynamo = recipeRepository.create(getRecipeWithNutritionalValues(recipeRequest));
         return toResponse(recipeDynamo);
     }
 
-    public RecipeResponse put(final String id, final RecipeRequest recipeRequest) throws UnprocessableContent {
+    public RecipeResponse put(final String id, final RecipeRequest recipeRequest) throws UnprocessableContent, EntityNotFoundException {
         if (!StringUtils.hasText(recipeRequest.id()) || !recipeRequest.id().equals(id)) {
             throw new UnprocessableContent();
         }
-        final RecipeDynamo recipeDynamo = recipeRepository.update(recipeRequest);
+        final RecipeDynamo recipeDynamo = recipeRepository.update(getRecipeWithNutritionalValues(recipeRequest));
         return toResponse(recipeDynamo);
     }
 
@@ -59,14 +70,27 @@ public class RecipeService {
                 data.getDescription(),
                 data.getProducts() != null
                         ? data.getProducts().stream()
-                            .map(iv -> new ItemValueResponse(iv.getName(), iv.getUnit(), iv.getQuantity()))
+                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
                             .collect(Collectors.toList())
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                            .map(iv -> new ItemValueResponse(iv.getName(), iv.getUnit(), iv.getQuantity()))
+                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
                             .collect(Collectors.toList())
                         : null
         );
+    }
+
+    private Recipe getRecipeWithNutritionalValues(final RecipeRequest recipeRequest) throws EntityNotFoundException {
+        final List<ProductDynamo> products = productRepository.get(
+                recipeRequest.products().stream().map(ItemValueRequest::id).toList()
+        );
+        final List<ItemValueDynamo> nutritionalValues = products.stream().map(ProductDynamo::getData)
+                .map(ProductDataDynamo::getNutritionalValues)
+                .flatMap(List::stream)
+                .toList();
+        final List<ItemValue> nutritionalValuesMerged = NutritionalValueCalculator.merge(nutritionalValues);
+
+        return Recipe.build(recipeRequest, nutritionalValuesMerged);
     }
 }

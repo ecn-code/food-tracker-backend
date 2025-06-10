@@ -13,6 +13,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Expression;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,16 @@ public class ProductRepository {
         return dynamoDbTable.query(r -> r.queryConditional(
                 QueryConditional.keyEqualTo(ProductDynamo.KEY.toBuilder().sortValue(id).build()))
         ).items().stream().findFirst().orElseThrow(EntityNotFoundException::new);
+    }
+
+    public List<ProductDynamo> get(final List<String> ids) throws EntityNotFoundException {
+        final List<ProductDynamo> result = new ArrayList<>();
+
+        for (final String id : ids) {
+            result.add(get(id));
+        }
+
+        return result;
     }
 
     public ProductDynamo create(final ProductRequest productRequest) {
@@ -61,11 +72,10 @@ public class ProductRepository {
         productDataDynamo.setDescription(productRequest.description());
         productDataDynamo.setRecipeId(productRequest.recipeId());
 
-        // Conversión de valores nutricionales
         if (productRequest.nutritionalValues() != null) {
             productDataDynamo.setNutritionalValues(
                 productRequest.nutritionalValues().stream()
-                    .map(this::toItemValueDynamo)
+                    .map(ItemValueDynamo::build)
                     .collect(Collectors.toList())
             );
         } else {
@@ -83,13 +93,5 @@ public class ProductRepository {
         dynamoDbTable.putItem(request);
 
         return productDynamo;
-    }
-
-    private ItemValueDynamo toItemValueDynamo(ItemValueRequest req) {
-        ItemValueDynamo d = new ItemValueDynamo();
-        d.setName(req.name());
-        d.setUnit(req.unit());
-        d.setQuantity(req.value());
-        return d;
     }
 }

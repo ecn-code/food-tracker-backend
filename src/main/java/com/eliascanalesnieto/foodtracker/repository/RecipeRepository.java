@@ -1,12 +1,11 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
-import com.eliascanalesnieto.foodtracker.dto.in.RecipeRequest;
 import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
-import com.eliascanalesnieto.foodtracker.utils.IdFormat;
+import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.Recipe;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
@@ -36,47 +35,43 @@ public class RecipeRepository {
         ).items().stream().findFirst().orElseThrow(EntityNotFoundException::new);
     }
 
-    public RecipeDynamo create(final RecipeRequest recipeRequest) {
-        return replace(new RecipeRequest(IdFormat.createId(), recipeRequest.name(),
-                        recipeRequest.description(), recipeRequest.products(), recipeRequest.nutritionalValues()),
-                "attribute_not_exists(PK) AND attribute_not_exists(SK)");
+    public RecipeDynamo create(final Recipe recipe) {
+        return replace(recipe,"attribute_not_exists(PK) AND attribute_not_exists(SK)");
     }
 
-    public RecipeDynamo update(final RecipeRequest recipeRequest) {
-        return replace(recipeRequest, "attribute_exists(PK) AND attribute_exists(SK)");
+    public RecipeDynamo update(final Recipe recipe) {
+        return replace(recipe, "attribute_exists(PK) AND attribute_exists(SK)");
     }
 
     public void delete(String id) {
         dynamoDbTable.deleteItem(RecipeDynamo.KEY.toBuilder().sortValue(id).build());
     }
 
-    private RecipeDynamo replace(RecipeRequest recipeRequest, String expression) {
+    private RecipeDynamo replace(Recipe recipe, String expression) {
         final RecipeDynamo recipeDynamo = new RecipeDynamo();
         recipeDynamo.setType(RecipeDynamo.KEY.partitionKeyValue().s());
-        recipeDynamo.setId(recipeRequest.id());
+        recipeDynamo.setId(recipe.id());
 
         final RecipeDataDynamo recipeDataDynamo = new RecipeDataDynamo();
         recipeDynamo.setData(recipeDataDynamo);
-        recipeDataDynamo.setName(recipeRequest.name());
-        recipeDataDynamo.setDescription(recipeRequest.description());
+        recipeDataDynamo.setName(recipe.name());
+        recipeDataDynamo.setDescription(recipe.description());
 
-        // Conversión de productos
-        if (recipeRequest.products() != null) {
+        if (recipe.products() != null) {
             recipeDataDynamo.setProducts(
-                recipeRequest.products().stream()
-                    .map(this::toItemValueDynamo)
-                    .collect(Collectors.toList())
+                    recipe.products().stream()
+                            .map(ItemValueDynamo::build)
+                            .collect(Collectors.toList())
             );
         } else {
             recipeDataDynamo.setProducts(null);
         }
 
-        // Conversión de valores nutricionales
-        if (recipeRequest.nutritionalValues() != null) {
+        if (recipe.nutritionalValues() != null) {
             recipeDataDynamo.setNutritionalValues(
-                recipeRequest.nutritionalValues().stream()
-                    .map(this::toItemValueDynamo)
-                    .collect(Collectors.toList())
+                    recipe.nutritionalValues().stream()
+                            .map(ItemValueDynamo::build)
+                            .collect(Collectors.toList())
             );
         } else {
             recipeDataDynamo.setNutritionalValues(null);
@@ -93,13 +88,5 @@ public class RecipeRepository {
         dynamoDbTable.putItem(request);
 
         return recipeDynamo;
-    }
-
-    private ItemValueDynamo toItemValueDynamo(ItemValueRequest req) {
-        ItemValueDynamo d = new ItemValueDynamo();
-        d.setName(req.name());
-        d.setUnit(req.unit());
-        d.setQuantity(req.value());
-        return d;
     }
 }

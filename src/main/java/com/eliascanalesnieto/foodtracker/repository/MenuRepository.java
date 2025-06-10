@@ -76,7 +76,7 @@ public class MenuRepository {
                             .collect(Collectors.toMap(
                                     Map.Entry::getKey,
                                     e -> e.getValue().stream()
-                                            .map(this::toItemValueDynamo)
+                                            .map(ItemValueDynamo::build)
                                             .collect(Collectors.toList())
                             ))
             );
@@ -87,7 +87,7 @@ public class MenuRepository {
         if (menuRequest.nutritionalValues() != null) {
             menuDataDynamo.setNutritionalValues(
                     menuRequest.nutritionalValues().stream()
-                            .map(this::toItemValueDynamo)
+                            .map(ItemValueDynamo::build)
                             .collect(Collectors.toList())
             );
         } else {
@@ -104,13 +104,5 @@ public class MenuRepository {
         dynamoDbTable.putItem(request);
 
         return menuDynamo;
-    }
-
-    private ItemValueDynamo toItemValueDynamo(ItemValueRequest req) {
-        ItemValueDynamo d = new ItemValueDynamo();
-        d.setName(req.name());
-        d.setUnit(req.unit());
-        d.setQuantity(req.value());
-        return d;
     }
 }
