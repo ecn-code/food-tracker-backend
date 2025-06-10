@@ -39,8 +39,4 @@ public class UnitDynamo {
     public UnitDataDynamo getData() {
         return data;
     }
-
-    public static String createId() {
-        return UUID.randomUUID().toString();
-    }
 }

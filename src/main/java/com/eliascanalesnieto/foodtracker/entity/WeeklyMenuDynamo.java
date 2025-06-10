@@ -1,5 +1,6 @@
 package com.eliascanalesnieto.foodtracker.entity;
 
+import com.eliascanalesnieto.foodtracker.utils.IdFormat;
 import lombok.Setter;
 import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
@@ -31,7 +32,7 @@ public class WeeklyMenuDynamo {
     @DynamoDbSortKey
     @DynamoDbAttribute("SK")
     public String getYearWeekUsername() {
-        return yearWeek + "#" + username;
+        return IdFormat.format(yearWeek, username);
     }
 
     @DynamoDbAttribute("additional_data")
@@ -40,7 +41,7 @@ public class WeeklyMenuDynamo {
     }
 
     public void setYearWeekUsername(final String yearWeekUsername) {
-        final String[] yearWeekUsernameAttrs = yearWeekUsername.split("#");
+        final String[] yearWeekUsernameAttrs = yearWeekUsername.split(IdFormat.SEPARATOR);
         this.yearWeek = yearWeekUsernameAttrs[0];
         this.username = yearWeekUsernameAttrs[1];
     }

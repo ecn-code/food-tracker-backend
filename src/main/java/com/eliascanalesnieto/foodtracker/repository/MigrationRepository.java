@@ -8,7 +8,7 @@ import com.eliascanalesnieto.foodtracker.entity.old.NutritionalValueOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.UserOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.WeeklyDynamoOld;
 import com.eliascanalesnieto.foodtracker.service.HashService;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.eliascanalesnieto.foodtracker.utils.IdFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -92,7 +92,7 @@ public class MigrationRepository {
             for (NutritionalValueOldDynamo nutritionalValueOldDynamo : page.items()) {
 
                 final NutritionalInformationDynamo nutritionalInformationDynamo = new NutritionalInformationDynamo();
-                nutritionalInformationDynamo.setId(NutritionalInformationDynamo.createId());
+                nutritionalInformationDynamo.setId(IdFormat.createId());
                 nutritionalInformationDynamo.setType(NutritionalInformationDynamo.KEY.partitionKeyValue().s());
 
                 final NutritionalInformationDataDynamo nutritionalInformationDataDynamo = new NutritionalInformationDataDynamo();

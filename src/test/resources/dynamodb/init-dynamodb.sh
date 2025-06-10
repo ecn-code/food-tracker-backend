@@ -9,6 +9,7 @@ files=(
   "nutritional-information-data.json"
   "recipe-data.json"
   "product-data.json"
+  "menu-data.json"
 )
 
 for file in "${files[@]}"; do

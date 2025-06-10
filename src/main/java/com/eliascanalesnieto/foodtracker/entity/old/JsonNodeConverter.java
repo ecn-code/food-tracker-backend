@@ -70,7 +70,6 @@ public class JsonNodeConverter implements AttributeConverter<JsonNode> {
                     .collect(Collectors.toList());
         }
         if (av.nul() != null && av.nul()) return null;
-        // Otros tipos pueden agregarse si quieres
         return null;
     }
 

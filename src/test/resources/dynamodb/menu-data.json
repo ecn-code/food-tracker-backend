@@ -1,0 +1,101 @@
+{
+  "food-tracker-v2": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "MENU_V2" },
+          "SK": { "S": "2025-01-12=user3" },
+          "additional_data": {
+            "M": {
+              "products": {
+                "M": {
+                  "Almuerzo": {
+                    "L": [
+                      {
+                        "M": {
+                          "name": { "S": "Patata" },
+                          "unit": { "S": "g" },
+                          "quantity": { "N": "500" }
+                        }
+                      },
+                      {
+                        "M": {
+                          "name": { "S": "Huevo" },
+                          "unit": { "S": "unidad" },
+                          "quantity": { "N": "4" }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Calorías" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "800" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "MENU_V2" },
+          "SK": { "S": "2025-12-12=user" },
+          "additional_data": {
+            "M": {
+              "products": {
+                "M": {
+                  "Cena": {
+                    "L": [
+                      {
+                        "M": {
+                          "name": { "S": "Patata" },
+                          "unit": { "S": "g" },
+                          "quantity": { "N": "500" }
+                        }
+                      },
+                      {
+                        "M": {
+                          "name": { "S": "Huevo" },
+                          "unit": { "S": "unidad" },
+                          "quantity": { "N": "4" }
+                        }
+                      },
+                      {
+                        "M": {
+                          "name": { "S": "Jamon" },
+                          "unit": { "S": "g" },
+                          "quantity": { "N": "40" }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "name": { "S": "Calorías" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "800" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

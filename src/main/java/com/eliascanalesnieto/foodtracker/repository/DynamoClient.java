@@ -17,12 +17,11 @@ import java.net.URI;
 public class DynamoClient {
 
     private final DynamoDbEnhancedClient enhancedClient;
-    private final DynamoDbClient standardClient;
     private final DynamoDBConfig dynamoDBConfig;
 
     public DynamoClient(final AppConfig appConfig) {
         dynamoDBConfig = appConfig.dynamo();
-        standardClient = DynamoDbClient.builder()
+        final DynamoDbClient standardClient = DynamoDbClient.builder()
                 .credentialsProvider(ProfileCredentialsProvider.create())
                 .endpointOverride(URI.create(dynamoDBConfig.endpoint()))
                 .build();

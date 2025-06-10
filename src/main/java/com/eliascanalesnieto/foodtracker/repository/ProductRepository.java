@@ -6,6 +6,7 @@ import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
 import com.eliascanalesnieto.foodtracker.entity.ProductDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
+import com.eliascanalesnieto.foodtracker.utils.IdFormat;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
@@ -36,7 +37,7 @@ public class ProductRepository {
     }
 
     public ProductDynamo create(final ProductRequest productRequest) {
-        return replace(new ProductRequest(ProductDynamo.createId(), productRequest.name(),
+        return replace(new ProductRequest(IdFormat.createId(), productRequest.name(),
                         productRequest.description(), productRequest.recipeId(), productRequest.nutritionalValues()),
                 "attribute_not_exists(PK) AND attribute_not_exists(SK)");
     }

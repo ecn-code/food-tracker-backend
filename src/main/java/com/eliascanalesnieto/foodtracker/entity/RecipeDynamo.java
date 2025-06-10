@@ -39,8 +39,4 @@ public class RecipeDynamo {
     public RecipeDataDynamo getData() {
         return data;
     }
-
-    public static String createId() {
-        return UUID.randomUUID().toString();
-    }
 }

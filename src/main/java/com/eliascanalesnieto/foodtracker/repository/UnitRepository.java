@@ -4,7 +4,7 @@ import com.eliascanalesnieto.foodtracker.dto.in.UnitRequest;
 import com.eliascanalesnieto.foodtracker.entity.UnitDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.UnitDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import com.eliascanalesnieto.foodtracker.utils.IdFormat;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
@@ -34,7 +34,7 @@ public class UnitRepository {
     }
 
     public UnitDynamo create(final UnitRequest unitRequest) {
-        return replace(new UnitRequest(UnitDynamo.createId(), unitRequest.shortName(), unitRequest.name()),
+        return replace(new UnitRequest(IdFormat.createId(), unitRequest.shortName(), unitRequest.name()),
                 "attribute_not_exists(PK) AND attribute_not_exists(SK)");
     }
 

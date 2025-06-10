@@ -1,9 +1,6 @@
 package com.eliascanalesnieto.foodtracker.config;
 
-import com.eliascanalesnieto.foodtracker.repository.DynamoClient;
-import com.eliascanalesnieto.foodtracker.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -12,13 +9,6 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.ListTablesResponse;
-
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
 
 @TestConfiguration
 @Slf4j
@@ -38,7 +28,8 @@ public class MockConfig {
                 "unit-data.json",
                 "nutritional-information-data.json",
                 "recipe-data.json",
-                "product-data.json"
+                "product-data.json",
+                "menu-data.json"
         };
 
         for (String file : files) {

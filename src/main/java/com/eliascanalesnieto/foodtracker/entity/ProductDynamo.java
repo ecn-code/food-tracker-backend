@@ -39,8 +39,4 @@ public class ProductDynamo {
     public ProductDataDynamo getData() {
         return data;
     }
-
-    public static String createId() {
-        return UUID.randomUUID().toString();
-    }
 }

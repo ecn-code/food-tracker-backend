@@ -39,8 +39,4 @@ public class NutritionalInformationDynamo {
     public NutritionalInformationDataDynamo getData() {
         return data;
     }
-
-    public static String createId() {
-        return UUID.randomUUID().toString();
-    }
 }

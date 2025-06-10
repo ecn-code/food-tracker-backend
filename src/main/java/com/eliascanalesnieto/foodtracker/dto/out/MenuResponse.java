@@ -1,4 +1,8 @@
 package com.eliascanalesnieto.foodtracker.dto.out;
 
-public record MenuResponse() {
+import java.util.List;
+import java.util.Map;
+
+public record MenuResponse(String date, String username, Map<String, List<ItemValueResponse>> products,
+                           List<ItemValueResponse> nutritionalValues) {
 }

@@ -4,7 +4,7 @@ import com.eliascanalesnieto.foodtracker.dto.in.NutritionalInformationRequest;
 import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import com.eliascanalesnieto.foodtracker.utils.IdFormat;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
@@ -35,7 +35,7 @@ public class NutritionalInformationRepository {
 
     public NutritionalInformationDynamo create(final NutritionalInformationRequest request) {
         return replace(new NutritionalInformationRequest(
-                NutritionalInformationDynamo.createId(),
+                        IdFormat.createId(),
                         request.shortName(),
                         request.name(),
                         request.unit()
