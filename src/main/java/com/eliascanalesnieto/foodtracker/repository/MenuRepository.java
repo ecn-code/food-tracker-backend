@@ -1,12 +1,12 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
-import com.eliascanalesnieto.foodtracker.dto.in.MenuRequest;
-import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
+import com.eliascanalesnieto.foodtracker.entity.NutritionalValueDynamo;
 import com.eliascanalesnieto.foodtracker.entity.MenuDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.MenuDynamo;
+import com.eliascanalesnieto.foodtracker.entity.ProductValueDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
+import com.eliascanalesnieto.foodtracker.model.Menu;
 import com.eliascanalesnieto.foodtracker.utils.DateFormat;
 import com.eliascanalesnieto.foodtracker.utils.IdFormat;
 import org.springframework.stereotype.Repository;
@@ -40,16 +40,15 @@ public class MenuRepository {
         ).items().stream().findFirst().orElseThrow(EntityNotFoundException::new);
     }
 
-    public MenuDynamo create(final MenuRequest menuRequest) throws ParseException {
-        return replace(menuRequest);
+    public MenuDynamo create(final Menu menu) throws ParseException {
+        return replace(menu);
     }
 
-    public MenuDynamo update(final String id, final MenuRequest menuRequest) throws ParseException, UnprocessableContent {
-        if (!id.equals(IdFormat.format(DateFormat.format(menuRequest.date()), menuRequest.username()))) {
+    public MenuDynamo update(final String id, final Menu menu) throws ParseException, UnprocessableContent {
+        if (!id.equals(IdFormat.format(DateFormat.format(menu.date()), menu.username()))) {
             throw new UnprocessableContent();
         }
-        return replace(menuRequest,
-                "attribute_exists(PK) AND attribute_exists(SK)", id);
+        return replace(menu,"attribute_exists(PK) AND attribute_exists(SK)", id);
     }
 
     public void delete(final String id) throws EntityNotFoundException {
@@ -57,12 +56,12 @@ public class MenuRepository {
         dynamoDbTable.deleteItem(MenuDynamo.KEY.toBuilder().sortValue(id).build());
     }
 
-    private MenuDynamo replace(MenuRequest menuRequest) throws ParseException {
-        final String id = IdFormat.format(DateFormat.format(menuRequest.date()), menuRequest.username());
-        return replace(menuRequest, "attribute_not_exists(PK) AND attribute_not_exists(SK)", id);
+    private MenuDynamo replace(Menu menu) throws ParseException {
+        final String id = IdFormat.format(DateFormat.format(menu.date()), menu.username());
+        return replace(menu, "attribute_not_exists(PK) AND attribute_not_exists(SK)", id);
     }
 
-    private MenuDynamo replace(MenuRequest menuRequest, String expression, String id) throws ParseException {
+    private MenuDynamo replace(Menu menuRequest, String expression, String id) throws ParseException {
         MenuDynamo menuDynamo = new MenuDynamo();
         menuDynamo.setType(MenuDynamo.KEY.partitionKeyValue().s());
         menuDynamo.setDateUsername(id);
@@ -76,7 +75,7 @@ public class MenuRepository {
                             .collect(Collectors.toMap(
                                     Map.Entry::getKey,
                                     e -> e.getValue().stream()
-                                            .map(ItemValueDynamo::build)
+                                            .map(ProductValueDynamo::build)
                                             .collect(Collectors.toList())
                             ))
             );
@@ -87,7 +86,7 @@ public class MenuRepository {
         if (menuRequest.nutritionalValues() != null) {
             menuDataDynamo.setNutritionalValues(
                     menuRequest.nutritionalValues().stream()
-                            .map(ItemValueDynamo::build)
+                            .map(NutritionalValueDynamo::build)
                             .collect(Collectors.toList())
             );
         } else {

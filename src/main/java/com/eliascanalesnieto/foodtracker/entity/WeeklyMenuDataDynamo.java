@@ -13,7 +13,7 @@ import java.util.Map;
 @DynamoDbBean
 public class WeeklyMenuDataDynamo {
 
-    private List<ItemValueDynamo> nutritionalValues;
+    private List<NutritionalValueDynamo> nutritionalValues;
     private Map<String, MenuDynamo> menus;
 
     @DynamoDbAttribute("menus")
@@ -22,7 +22,7 @@ public class WeeklyMenuDataDynamo {
     }
 
     @DynamoDbAttribute("nutritional_values")
-    public List<ItemValueDynamo> getNutritionalValues() {
+    public List<NutritionalValueDynamo> getNutritionalValues() {
         return nutritionalValues;
     }
 }

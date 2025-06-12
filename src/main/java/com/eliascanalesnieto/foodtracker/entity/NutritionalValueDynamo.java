@@ -1,6 +1,6 @@
 package com.eliascanalesnieto.foodtracker.entity;
 
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
+import com.eliascanalesnieto.foodtracker.dto.in.NutritionalValueRequest;
 import com.eliascanalesnieto.foodtracker.model.ItemValue;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,7 +10,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @Setter
 @ToString
 @DynamoDbBean
-public class ItemValueDynamo {
+public class NutritionalValueDynamo {
 
     private String id;
     private String unit;
@@ -37,8 +37,8 @@ public class ItemValueDynamo {
         return unit;
     }
 
-    public static ItemValueDynamo build(final ItemValueRequest itemValueRequest) {
-        ItemValueDynamo d = new ItemValueDynamo();
+    public static NutritionalValueDynamo build(final NutritionalValueRequest itemValueRequest) {
+        NutritionalValueDynamo d = new NutritionalValueDynamo();
         d.setId(itemValueRequest.id());
         d.setName(itemValueRequest.name());
         d.setUnit(itemValueRequest.unit());
@@ -46,8 +46,8 @@ public class ItemValueDynamo {
         return d;
     }
 
-    public static ItemValueDynamo build(final ItemValue itemValue) {
-        ItemValueDynamo d = new ItemValueDynamo();
+    public static NutritionalValueDynamo build(final ItemValue itemValue) {
+        NutritionalValueDynamo d = new NutritionalValueDynamo();
         d.setId(itemValue.id());
         d.setName(itemValue.name());
         d.setUnit(itemValue.unit());

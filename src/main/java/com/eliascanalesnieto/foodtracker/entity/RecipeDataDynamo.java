@@ -14,8 +14,8 @@ public class RecipeDataDynamo {
 
     private String name;
     private String description;
-    private List<ItemValueDynamo> products;
-    private List<ItemValueDynamo> nutritionalValues;
+    private List<ProductValueDynamo> products;
+    private List<NutritionalValueDynamo> nutritionalValues;
 
     @DynamoDbAttribute("name")
     public String getName() {
@@ -28,12 +28,12 @@ public class RecipeDataDynamo {
     }
 
     @DynamoDbAttribute("products")
-    public List<ItemValueDynamo> getProducts() {
+    public List<ProductValueDynamo> getProducts() {
         return products;
     }
 
     @DynamoDbAttribute("nutritional_values")
-    public List<ItemValueDynamo> getNutritionalValues() {
+    public List<NutritionalValueDynamo> getNutritionalValues() {
         return nutritionalValues;
     }
 }

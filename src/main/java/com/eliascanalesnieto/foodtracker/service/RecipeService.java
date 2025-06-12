@@ -1,11 +1,8 @@
 package com.eliascanalesnieto.foodtracker.service;
 
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.RecipeRequest;
-import com.eliascanalesnieto.foodtracker.dto.out.ItemValueResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.RecipeResponse;
-import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
-import com.eliascanalesnieto.foodtracker.entity.ProductDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
@@ -16,12 +13,13 @@ import com.eliascanalesnieto.foodtracker.repository.ProductRepository;
 import com.eliascanalesnieto.foodtracker.repository.RecipeRepository;
 import com.eliascanalesnieto.foodtracker.utils.NutritionalValueCalculator;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -70,27 +68,25 @@ public class RecipeService {
                 data.getDescription(),
                 data.getProducts() != null
                         ? data.getProducts().stream()
-                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
-                            .collect(Collectors.toList())
+                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
+                        .collect(Collectors.toList())
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
-                            .collect(Collectors.toList())
+                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
+                        .collect(Collectors.toList())
                         : null
         );
     }
 
-    private Recipe getRecipeWithNutritionalValues(final RecipeRequest recipeRequest) throws EntityNotFoundException {
-        final List<ProductDynamo> products = productRepository.get(
-                recipeRequest.products().stream().map(ItemValueRequest::id).toList()
-        );
-        final List<ItemValueDynamo> nutritionalValues = products.stream().map(ProductDynamo::getData)
-                .map(ProductDataDynamo::getNutritionalValues)
-                .flatMap(List::stream)
-                .toList();
-        final List<ItemValue> nutritionalValuesMerged = NutritionalValueCalculator.merge(nutritionalValues);
+    private Recipe getRecipeWithNutritionalValues(final RecipeRequest recipeRequest) {
+        final Collection<ItemValue> nutritionalValues = NutritionalValueCalculator.mergeList(recipeRequest.products(), this::getProduct);
 
-        return Recipe.build(recipeRequest, nutritionalValuesMerged);
+        return Recipe.build(recipeRequest, nutritionalValues);
+    }
+
+    @SneakyThrows
+    private ProductDynamo getProduct(final String id) {
+        return productRepository.get(id);
     }
 }

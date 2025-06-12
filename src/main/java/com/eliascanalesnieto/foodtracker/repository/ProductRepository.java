@@ -1,8 +1,7 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.ProductRequest;
-import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
+import com.eliascanalesnieto.foodtracker.entity.NutritionalValueDynamo;
 import com.eliascanalesnieto.foodtracker.entity.ProductDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
@@ -75,7 +74,7 @@ public class ProductRepository {
         if (productRequest.nutritionalValues() != null) {
             productDataDynamo.setNutritionalValues(
                 productRequest.nutritionalValues().stream()
-                    .map(ItemValueDynamo::build)
+                    .map(NutritionalValueDynamo::build)
                     .collect(Collectors.toList())
             );
         } else {

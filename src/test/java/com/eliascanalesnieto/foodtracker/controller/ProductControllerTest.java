@@ -2,10 +2,10 @@ package com.eliascanalesnieto.foodtracker.controller;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.config.MockConfig;
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
+import com.eliascanalesnieto.foodtracker.dto.in.NutritionalValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.ProductRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
-import com.eliascanalesnieto.foodtracker.dto.out.ItemValueResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.LoginResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.ProductResponse;
 import org.junit.jupiter.api.Test;
@@ -109,7 +109,7 @@ class ProductControllerTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new ProductResponse(null, "name", "desc", "",
-                        List.of(new ItemValueResponse("1", "ni", "g", 3d))));
+                        List.of(new NutritionalValueResponse("1", "ni", "g", 3d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -167,7 +167,7 @@ class ProductControllerTest {
                 HttpMethod.PUT,
                 login(new ProductRequest(product.id(), product.name() + "-m", product.description(), product.recipeId(),
                         product.nutritionalValues().stream()
-                                .map(i -> new ItemValueRequest(i.id(), i.name(), i.unit(), i.value()))
+                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.unit(), i.value()))
                                 .toList())),
                 new ParameterizedTypeReference<>() {
                 }
@@ -183,7 +183,7 @@ class ProductControllerTest {
                 HttpMethod.PUT,
                 login(new ProductRequest(product.id(), product.name(), product.description(), product.recipeId(),
                         product.nutritionalValues().stream()
-                                .map(i -> new ItemValueRequest(i.id(), i.name(), i.unit(), i.value()))
+                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.unit(), i.value()))
                                 .toList())),
                 new ParameterizedTypeReference<>() {
                 }
@@ -266,17 +266,17 @@ class ProductControllerTest {
 
     private static ProductResponse getProduct2() {
         return new ProductResponse("2", "Pan", "Pan integral", "1",
-                List.of(new ItemValueResponse("1", "Calorías", "kcal", 250d)));
+                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 250d)));
     }
 
     private static ProductResponse getProduct1() {
         return new ProductResponse("1", "Leche", "Leche entera de vaca", "",
-                List.of(new ItemValueResponse("1", "Calorías", "kcal", 60d)));
+                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 60d)));
     }
 
     private static ProductRequest getProductRequest(final String id, final String name) {
         final String description = "desc";
-        final List<ItemValueRequest> nutritionalValues = List.of(new ItemValueRequest("1", "ni", "g", 3d));
+        final List<NutritionalValueRequest> nutritionalValues = List.of(new NutritionalValueRequest("1", "ni", "g", 3d));
 
         return new ProductRequest(id, name, description, "", nutritionalValues);
     }

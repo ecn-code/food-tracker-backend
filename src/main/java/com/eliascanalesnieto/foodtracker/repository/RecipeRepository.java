@@ -1,10 +1,10 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
-import com.eliascanalesnieto.foodtracker.entity.ItemValueDynamo;
+import com.eliascanalesnieto.foodtracker.entity.NutritionalValueDynamo;
+import com.eliascanalesnieto.foodtracker.entity.ProductValueDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDataDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
-import com.eliascanalesnieto.foodtracker.model.ItemValue;
 import com.eliascanalesnieto.foodtracker.model.Recipe;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
@@ -60,7 +60,7 @@ public class RecipeRepository {
         if (recipe.products() != null) {
             recipeDataDynamo.setProducts(
                     recipe.products().stream()
-                            .map(ItemValueDynamo::build)
+                            .map(ProductValueDynamo::build)
                             .collect(Collectors.toList())
             );
         } else {
@@ -70,7 +70,7 @@ public class RecipeRepository {
         if (recipe.nutritionalValues() != null) {
             recipeDataDynamo.setNutritionalValues(
                     recipe.nutritionalValues().stream()
-                            .map(ItemValueDynamo::build)
+                            .map(NutritionalValueDynamo::build)
                             .collect(Collectors.toList())
             );
         } else {

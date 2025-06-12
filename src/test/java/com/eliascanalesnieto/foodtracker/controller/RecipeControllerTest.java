@@ -2,10 +2,10 @@ package com.eliascanalesnieto.foodtracker.controller;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.config.MockConfig;
-import com.eliascanalesnieto.foodtracker.dto.in.ItemValueRequest;
+import com.eliascanalesnieto.foodtracker.dto.in.ProductValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.RecipeRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
-import com.eliascanalesnieto.foodtracker.dto.out.ItemValueResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.LoginResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.RecipeResponse;
 import org.junit.jupiter.api.Test;
@@ -109,9 +109,9 @@ class RecipeControllerTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new RecipeResponse(null, "name", "Receta tradicional española",
-                        List.of(new ItemValueResponse("1", "Patata", "g", 500d),
-                                new ItemValueResponse("2", "Huevo", "unidad", 4d)),
-                        List.of(new ItemValueResponse("1", "Calorías", "kcal", 310d))));
+                        List.of(new NutritionalValueResponse("1", "Patata", "g", 500d),
+                                new NutritionalValueResponse("2", "Huevo", "unidad", 4d)),
+                        List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 310d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -168,9 +168,9 @@ class RecipeControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(new RecipeResponse(id, name + "-m", "Receta tradicional española",
-                        List.of(new ItemValueResponse("1", "Patata", "g", 500d),
-                                new ItemValueResponse("2", "Huevo", "unidad", 4d)),
-                        List.of(new ItemValueResponse("1", "Calorías", "kcal", 310d))));
+                        List.of(new NutritionalValueResponse("1", "Patata", "g", 500d),
+                                new NutritionalValueResponse("2", "Huevo", "unidad", 4d)),
+                        List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 310d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + id,
@@ -257,23 +257,23 @@ class RecipeControllerTest {
 
     private static RecipeResponse getRecipe2() {
         return new RecipeResponse("2", "Tortilla de jamon", "Receta tortilla jamon",
-                List.of(new ItemValueResponse("1", "Patata", "g", 500d),
-                        new ItemValueResponse("2", "Huevo", "unidad", 4d),
-                        new ItemValueResponse("3", "Jamon", "g", 40d)),
-                List.of(new ItemValueResponse("1", "Calorías", "kcal", 800d)));
+                List.of(new NutritionalValueResponse("1", "Patata", "g", 500d),
+                        new NutritionalValueResponse("2", "Huevo", "unidad", 4d),
+                        new NutritionalValueResponse("3", "Jamon", "g", 40d)),
+                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 800d)));
     }
 
     private static RecipeResponse getRecipe1() {
         return new RecipeResponse("1", "Tortilla de patatas", "Receta tradicional española",
-                List.of(new ItemValueResponse("1", "Patata", "g", 500d),
-                        new ItemValueResponse("2", "Huevo", "unidad", 4d)),
-                List.of(new ItemValueResponse("1", "Calorías", "kcal", 800d)));
+                List.of(new NutritionalValueResponse("1", "Patata", "g", 500d),
+                        new NutritionalValueResponse("2", "Huevo", "unidad", 4d)),
+                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 800d)));
     }
 
     private static RecipeRequest getRecipeRequest(final String id, final String name) {
         return new RecipeRequest(id, name, "Receta tradicional española",
-                List.of(new ItemValueRequest("1", "Patata", "g", 500d),
-                        new ItemValueRequest("2", "Huevo", "unidad", 4d)));
+                List.of(new ProductValueRequest("1", "Patata", "", "g", 500d),
+                        new ProductValueRequest("2", "Huevo", "", "unidad", 4d)));
     }
 
 }

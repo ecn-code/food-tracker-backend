@@ -1,7 +1,7 @@
 package com.eliascanalesnieto.foodtracker.service;
 
 import com.eliascanalesnieto.foodtracker.dto.in.ProductRequest;
-import com.eliascanalesnieto.foodtracker.dto.out.ItemValueResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.ProductResponse;
 import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
@@ -60,7 +60,7 @@ public class ProductService {
                 data.getRecipeId(),
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                            .map(iv -> new ItemValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
+                            .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
                             .collect(Collectors.toList())
                         : null
         );

@@ -79,7 +79,8 @@
                         "M": {
                           "id": { "S": "3" },
                           "name": { "S": "Jamon" },
-                          "unit": { "S": "g" },
+                          "recipe_id": { "S": "1" },
+                          "unit": { "S": "portion" },
                           "quantity": { "N": "40" }
                         }
                       }

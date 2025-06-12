@@ -32,13 +32,13 @@ public class MenuController {
     }
 
     @PostMapping
-    public MenuResponse post(@Auth final User currentUser, @RequestBody final MenuRequest menuRequest) throws UnprocessableContent, ParseException {
+    public MenuResponse post(@Auth final User currentUser, @RequestBody final MenuRequest menuRequest) throws UnprocessableContent, ParseException, EntityNotFoundException {
         validate(menuRequest);
         return menuService.post(menuRequest);
     }
 
     @PutMapping("/{id}")
-    public MenuResponse put(@Auth final User currentUser, @PathVariable final String id, @RequestBody final MenuRequest menuRequest) throws UnprocessableContent, ParseException {
+    public MenuResponse put(@Auth final User currentUser, @PathVariable final String id, @RequestBody final MenuRequest menuRequest) throws UnprocessableContent, ParseException, EntityNotFoundException {
         validate(menuRequest);
         return menuService.put(id, menuRequest);
     }
