@@ -38,12 +38,12 @@ public class MenuService {
                 .toList();
     }
 
-    public MenuResponse get(final String id) throws EntityNotFoundException, ParseException {
+    public MenuResponse get(final String id) throws EntityNotFoundException {
         final MenuDynamo menuDynamo = menuRepository.get(id);
         return toResponse(menuDynamo);
     }
 
-    public MenuResponse post(final MenuRequest menuRequest) throws UnprocessableContent, ParseException, EntityNotFoundException {
+    public MenuResponse post(final MenuRequest menuRequest) throws UnprocessableContent, ParseException {
         if (menuRequest.date() == null || menuRequest.username() == null) {
             throw new UnprocessableContent();
         }
@@ -51,7 +51,7 @@ public class MenuService {
         return toResponse(menuDynamo);
     }
 
-    public MenuResponse put(final String id, final MenuRequest menuRequest) throws UnprocessableContent, ParseException, EntityNotFoundException {
+    public MenuResponse put(final String id, final MenuRequest menuRequest) throws UnprocessableContent, ParseException {
         if (menuRequest.date() == null || menuRequest.username() == null) {
             throw new UnprocessableContent();
         }

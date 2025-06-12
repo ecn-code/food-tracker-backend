@@ -2,7 +2,6 @@ package com.eliascanalesnieto.foodtracker.config;
 
 import com.eliascanalesnieto.foodtracker.dto.in.UserLogin;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -11,9 +10,8 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class AuthorizationToUserLoginConverter implements Converter<String, Optional<UserLogin>> {
+public class AuthorizationToUserLoginConverter {
 
-    @Override
     public Optional<UserLogin> convert(final String source)  {
         if (StringUtils.hasText(source) && source.startsWith("Basic ")) {
             final String base64Credentials = source.substring("Basic ".length());

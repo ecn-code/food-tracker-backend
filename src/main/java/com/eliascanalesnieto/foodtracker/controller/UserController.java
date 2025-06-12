@@ -31,7 +31,8 @@ public class UserController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestHeader("Authorization") String authHeader) throws LoginException {
-        UserLogin userLogin = authorizationToUserLoginConverter.convert(authHeader).orElseThrow(LoginException::new);
+        UserLogin userLogin = authorizationToUserLoginConverter.convert(authHeader)
+                .orElseThrow(LoginException::new);
         return authorizationService.createToken(userLogin);
     }
 

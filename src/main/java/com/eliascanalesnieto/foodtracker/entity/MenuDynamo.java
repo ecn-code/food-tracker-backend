@@ -14,7 +14,6 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -37,7 +36,7 @@ public class MenuDynamo {
 
     @DynamoDbSortKey
     @DynamoDbAttribute("SK")
-    public String getDateUsername() throws ParseException {
+    public String getDateUsername() {
         return IdFormat.format(DateFormat.format(date), username);
     }
 

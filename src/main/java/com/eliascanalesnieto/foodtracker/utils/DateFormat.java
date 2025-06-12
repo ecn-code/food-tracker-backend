@@ -15,7 +15,7 @@ public class DateFormat {
         return sdf.parse(yyyyMMdd);
     }
 
-    public static String format(final Date date) throws ParseException {
+    public static String format(final Date date) {
         return sdf.format(date);
     }
 

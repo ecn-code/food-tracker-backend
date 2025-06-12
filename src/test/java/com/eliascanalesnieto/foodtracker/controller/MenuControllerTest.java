@@ -2,7 +2,6 @@ package com.eliascanalesnieto.foodtracker.controller;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
 import com.eliascanalesnieto.foodtracker.config.MockConfig;
-import com.eliascanalesnieto.foodtracker.dto.in.NutritionalValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.MenuRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.ProductValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
@@ -261,11 +260,11 @@ class MenuControllerTest {
         assertNull(response.getBody());
     }
 
-    private HttpEntity login() {
+    private HttpEntity<MenuRequest> login() {
         return login(null);
     }
 
-    private HttpEntity login(final MenuRequest MenuRequest) {
+    private HttpEntity<MenuRequest> login(final MenuRequest MenuRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic %s".formatted(Base64.getEncoder().encodeToString("username:password".getBytes(StandardCharsets.UTF_8))));
         headers.setContentType(MediaType.APPLICATION_JSON);

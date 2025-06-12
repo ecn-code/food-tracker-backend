@@ -69,7 +69,6 @@ public class JsonNodeConverter implements AttributeConverter<JsonNode> {
                     .map(this::attributeValueToObject)
                     .collect(Collectors.toList());
         }
-        if (av.nul() != null && av.nul()) return null;
         return null;
     }
 

@@ -6,6 +6,7 @@ import com.eliascanalesnieto.foodtracker.model.User;
 import com.eliascanalesnieto.foodtracker.service.AuthorizationService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -30,8 +31,8 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws AuthorizationException {
+    public Object resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  @NonNull NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws AuthorizationException {
 
         final HttpServletRequest request = ((ServletWebRequest) webRequest).getRequest();
         final String authorization = request.getHeader("Authorization");

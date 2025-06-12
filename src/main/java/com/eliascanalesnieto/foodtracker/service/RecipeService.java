@@ -39,7 +39,7 @@ public class RecipeService {
         return toResponse(recipeDynamo);
     }
 
-    public RecipeResponse post(final RecipeRequest recipeRequest) throws UnprocessableContent, EntityNotFoundException {
+    public RecipeResponse post(final RecipeRequest recipeRequest) throws UnprocessableContent {
         if (StringUtils.hasText(recipeRequest.id())) {
             throw new UnprocessableContent();
         }
@@ -48,7 +48,7 @@ public class RecipeService {
         return toResponse(recipeDynamo);
     }
 
-    public RecipeResponse put(final String id, final RecipeRequest recipeRequest) throws UnprocessableContent, EntityNotFoundException {
+    public RecipeResponse put(final String id, final RecipeRequest recipeRequest) throws UnprocessableContent {
         if (!StringUtils.hasText(recipeRequest.id()) || !recipeRequest.id().equals(id)) {
             throw new UnprocessableContent();
         }
