@@ -1,0 +1,32 @@
+{
+  "food-tracker-v2": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "SETTING_V2" },
+          "SK": { "S": "v1" },
+          "additional_data": {
+            "M": {
+              "parts_of_day": { "L": [ {"S": "Desayuno"}, {"S": "Almuerzo"}, {"S": "Merienda"}, {"S": "Cena"} ] },
+              "types": { "L": [ {"S": "DEFAULT"}, {"S": "WEEKEND"} ] }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "SETTING_V2" },
+          "SK": { "S": "v2" },
+          "additional_data": {
+            "M": {
+              "parts_of_day": { "L": [ {"S": "Breakfast"}, {"S": "Lunch"}, {"S": "Snack"}, {"S": "Dinner"} ] },
+              "types": { "L": [ {"S": "DEFAULT"}, {"S": "HOLIDAY"} ] }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

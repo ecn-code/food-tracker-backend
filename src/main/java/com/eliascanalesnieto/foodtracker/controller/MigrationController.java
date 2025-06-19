@@ -30,4 +30,9 @@ public class MigrationController {
         migrationRepository.migrateNutritionalValue();
     }
 
+    @GetMapping("/settings")
+    public void settings() {
+        migrationRepository.migrateSettings();
+    }
+
 }

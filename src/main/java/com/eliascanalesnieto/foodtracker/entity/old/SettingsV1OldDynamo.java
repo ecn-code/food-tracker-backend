@@ -13,16 +13,13 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @DynamoDbBean
 @ToString
 @Setter
-public class WeeklyDynamoOld {
+public class SettingsV1OldDynamo {
 
-    public static final TableSchema<WeeklyDynamoOld> TABLE_SCHEMA = TableSchema.fromBean(WeeklyDynamoOld.class);
+    public static final TableSchema<SettingsV1OldDynamo> TABLE_SCHEMA = TableSchema.fromBean(SettingsV1OldDynamo.class);
 
     private String pk;
     private String sk;
-    private String weeklyNumber;
-    private String username;
-    private JsonNode menus;
-    private JsonNode nutritionalValues;
+    private JsonNode settings;
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("PK")
@@ -35,27 +32,10 @@ public class WeeklyDynamoOld {
     public String getSk() {
         return sk;
     }
-    @DynamoDbAttribute("username")
-    public String getUsername() {
-        return username;
-    }
-
-
-    @DynamoDbAttribute("weekly_number")
-    public String getWeeklyNumber() {
-        return weeklyNumber;
-    }
 
     @DynamoDbConvertedBy(JsonNodeConverter.class)
-    @DynamoDbAttribute("menus")
-    public JsonNode getMenus() {
-        return menus;
+    @DynamoDbAttribute("settings")
+    public JsonNode getSettings() {
+        return settings;
     }
-
-    @DynamoDbConvertedBy(JsonNodeConverter.class)
-    @DynamoDbAttribute("nutritional_value")
-    public JsonNode getNutritionalValues() {
-        return nutritionalValues;
-    }
-
 }

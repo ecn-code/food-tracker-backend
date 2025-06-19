@@ -15,6 +15,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @DynamoDbBean
 public class WeeklyMenuDynamo {
 
+    public WeeklyMenuDynamo() {
+        type = KEY.partitionKeyValue().s();
+    }
+
     public static final TableSchema<WeeklyMenuDynamo> TABLE_SCHEMA = TableSchema.fromBean(WeeklyMenuDynamo.class);
     public static final Key KEY = Key.builder().partitionValue("WEEKLY_MENU_V2").build();
 

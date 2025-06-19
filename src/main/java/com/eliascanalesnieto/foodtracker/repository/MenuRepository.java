@@ -63,7 +63,6 @@ public class MenuRepository {
 
     private MenuDynamo replace(Menu menuRequest, String expression, String id) throws ParseException {
         MenuDynamo menuDynamo = new MenuDynamo();
-        menuDynamo.setType(MenuDynamo.KEY.partitionKeyValue().s());
         menuDynamo.setDateUsername(id);
 
         MenuDataDynamo menuDataDynamo = new MenuDataDynamo();

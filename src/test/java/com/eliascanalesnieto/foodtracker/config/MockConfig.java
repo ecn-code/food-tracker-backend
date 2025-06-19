@@ -29,7 +29,8 @@ public class MockConfig {
                 "nutritional-information-data.json",
                 "recipe-data.json",
                 "product-data.json",
-                "menu-data.json"
+                "menu-data.json",
+                "setting-data.json"
         };
 
         for (String file : files) {

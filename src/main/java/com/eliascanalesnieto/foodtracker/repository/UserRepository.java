@@ -7,6 +7,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Expression;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,6 +20,28 @@ public class UserRepository {
         this.dynamoDbTable = dynamoClient.createTable(UserDynamo.TABLE_SCHEMA);
     }
 
+    public List<UserDynamo> get() {
+        return dynamoDbTable.query(r -> r
+                        .queryConditional(QueryConditional.keyEqualTo(
+                                UserDynamo.KEY.toBuilder().build())
+                        )
+                )
+                .stream()
+                .flatMap(page -> page.items().stream())
+                .toList();
+    }
+
+    public Optional<UserDynamo> get(final String username) {
+        return dynamoDbTable.query(r -> r
+                        .queryConditional(QueryConditional.keyEqualTo(
+                                UserDynamo.KEY.toBuilder().sortValue(username).build())
+                        )
+                )
+                .stream()
+                .flatMap(page -> page.items().stream())
+                .findFirst();
+    }
+
     public Optional<UserDynamo> get(final String username, final String code) {
         return dynamoDbTable.query(r -> r
                         .queryConditional(QueryConditional.keyEqualTo(
@@ -28,17 +51,6 @@ public class UserRepository {
                                         .expression("additional_data.last_code = :code")
                                         .expressionValues(Map.of(":code", AttributeValue.fromS(code)))
                                         .build()
-                        )
-                )
-                .stream()
-                .flatMap(page -> page.items().stream())
-                .findFirst();
-    }
-
-    public Optional<UserDynamo> get(final String username) {
-        return dynamoDbTable.query(r -> r
-                        .queryConditional(QueryConditional.keyEqualTo(
-                                UserDynamo.KEY.toBuilder().sortValue(username).build())
                         )
                 )
                 .stream()

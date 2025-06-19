@@ -10,6 +10,7 @@ files=(
   "recipe-data.json"
   "product-data.json"
   "menu-data.json"
+  "setting-data.json"
 )
 
 for file in "${files[@]}"; do

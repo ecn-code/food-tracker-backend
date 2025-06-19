@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -29,9 +31,14 @@ public class UserController {
     private final AuthorizationService authorizationService;
     private final UserService userService;
 
+    @GetMapping
+    public List<UserResponse> get(@Auth final User currentUser) {
+        return userService.get().stream().map(user -> new UserResponse(user.username())).toList();
+    }
+
     @PostMapping("/login")
     public LoginResponse login(@RequestHeader("Authorization") String authHeader) throws LoginException {
-        UserLogin userLogin = authorizationToUserLoginConverter.convert(authHeader)
+        final UserLogin userLogin = authorizationToUserLoginConverter.convert(authHeader)
                 .orElseThrow(LoginException::new);
         return authorizationService.createToken(userLogin);
     }

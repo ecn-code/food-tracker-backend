@@ -6,11 +6,20 @@ import com.eliascanalesnieto.foodtracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public List<User> get() {
+        return userRepository.get()
+                .stream()
+                .map(userDynamo -> new User(userDynamo.getUsername()))
+                .toList();
+    }
 
     public User get(final String username) throws EntityNotFoundException {
         return userRepository.get(username)

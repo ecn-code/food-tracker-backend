@@ -20,6 +20,10 @@ import java.util.Date;
 @DynamoDbBean
 public class MenuDynamo {
 
+    public MenuDynamo() {
+        type = KEY.partitionKeyValue().s();
+    }
+
     public static final TableSchema<MenuDynamo> TABLE_SCHEMA = TableSchema.fromBean(MenuDynamo.class);
     public static final Key KEY = Key.builder().partitionValue("MENU_V2").build();
 

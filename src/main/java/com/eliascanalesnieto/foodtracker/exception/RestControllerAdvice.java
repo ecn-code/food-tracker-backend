@@ -23,7 +23,7 @@ public class RestControllerAdvice {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handle(final ExpiredJwtException authorizationException) {
-        return ResponseEntity.status(HttpStatusCode.valueOf(403)).body(new ErrorResponse("Token error"));
+        return ResponseEntity.status(HttpStatusCode.valueOf(419)).body(new ErrorResponse("Token error"));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
