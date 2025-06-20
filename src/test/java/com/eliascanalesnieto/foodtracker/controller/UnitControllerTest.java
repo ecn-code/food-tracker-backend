@@ -5,6 +5,7 @@ import com.eliascanalesnieto.foodtracker.config.MockConfig;
 import com.eliascanalesnieto.foodtracker.dto.in.UnitRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.LoginResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.PaginatedList;
 import com.eliascanalesnieto.foodtracker.dto.out.UnitResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ class UnitControllerTest {
 
     @Test
     void getAll() {
-        ResponseEntity<List<UnitResponse>> response = testRestTemplate.exchange(
+        ResponseEntity<PaginatedList<UnitResponse>> response = testRestTemplate.exchange(
                 UNITS,
                 HttpMethod.GET,
                 login(),
@@ -52,12 +53,13 @@ class UnitControllerTest {
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertThat(response.getBody())
                 .usingRecursiveComparison()
-                .isEqualTo(
+                .isEqualTo(new PaginatedList<>(
                         List.of(
                                 new UnitResponse("1", "kg", "kilogram"),
                                 new UnitResponse("5", "g", "gram")
-                        )
-                );
+                        ),
+                        null
+                ));
     }
 
     @Test

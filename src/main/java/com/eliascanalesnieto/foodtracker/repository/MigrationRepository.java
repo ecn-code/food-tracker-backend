@@ -1,20 +1,10 @@
 package com.eliascanalesnieto.foodtracker.repository;
 
 import com.eliascanalesnieto.foodtracker.config.AppConfig;
-import com.eliascanalesnieto.foodtracker.entity.MenuDataDynamo;
-import com.eliascanalesnieto.foodtracker.entity.MenuDynamo;
-import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDataDynamo;
-import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDynamo;
-import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
-import com.eliascanalesnieto.foodtracker.entity.ProductValueDynamo;
-import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
-import com.eliascanalesnieto.foodtracker.entity.SettingDataDynamo;
-import com.eliascanalesnieto.foodtracker.entity.SettingDynamo;
-import com.eliascanalesnieto.foodtracker.entity.UserDataDynamo;
-import com.eliascanalesnieto.foodtracker.entity.UserDynamo;
-import com.eliascanalesnieto.foodtracker.entity.WeeklyMenuDataDynamo;
-import com.eliascanalesnieto.foodtracker.entity.WeeklyMenuDynamo;
+import com.eliascanalesnieto.foodtracker.entity.*;
 import com.eliascanalesnieto.foodtracker.entity.old.NutritionalValueOldDynamo;
+import com.eliascanalesnieto.foodtracker.entity.old.ProductOldDynamo;
+import com.eliascanalesnieto.foodtracker.entity.old.RecipeOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.SettingsV1OldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.UserOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.WeeklyOldDynamo;
@@ -26,6 +16,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
@@ -38,7 +29,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -50,6 +40,122 @@ public class MigrationRepository {
     private final HashService hashService;
     private final ProductRepository productRepository;
     private final RecipeRepository recipeRepository;
+    private final NutritionalInformationRepository nutritionalInformationRepository;
+
+    private final Map<String, ProductDynamo> migratedProducts = new HashMap<>();
+    private final Map<String, RecipeDynamo> migratedRecipes = new HashMap<>();
+
+    public void migrateProductsAndRecipes() {
+        migrateProductsPrivate();
+        migrateRecipesPrivate();
+
+        for (ProductDynamo product : migratedProducts.values()) {
+            if (StringUtils.hasText(product.getData().getRecipeId())) {
+                final RecipeDynamo recipeDynamo = migratedRecipes.get(product.getData().getRecipeId().toLowerCase());
+                if (recipeDynamo == null) throw new RuntimeException("Recipe null: " + product);
+                product.getData().setRecipeId(recipeDynamo.getId());
+            }
+        }
+
+        for (RecipeDynamo recipe : migratedRecipes.values()) {
+            for (ProductValueDynamo productValue : recipe.getData().getProducts()) {
+                if (productValue.getName().equals("seitan 1/4")) {
+                    productValue.setName("seitan 1/8");
+                }
+                final ProductDynamo productDynamo = migratedProducts.get(productValue.getName());
+                if (productDynamo == null) {
+                    throw new RuntimeException("ProductDynamo null: " + productValue.getName());
+                }
+                productValue.setName(productDynamo.getData().getName());
+                productValue.setId(productDynamo.getId());
+                productValue.setUnit("g");
+                productValue.setRecipeId(productDynamo.getData().getRecipeId());
+                if (StringUtils.hasText(productValue.getRecipeId())) {
+                    productValue.setUnit(productValue.getQuantity() > 1 ? "portions" : "portion");
+                }
+            }
+        }
+
+        final DynamoDbTable<ProductDynamo> tableProduct = dynamoClient.createTable(ProductDynamo.TABLE_SCHEMA);
+        for (ProductDynamo product : migratedProducts.values()) {
+            tableProduct.putItem(product);
+        }
+
+        final DynamoDbTable<RecipeDynamo> tableRecipe = dynamoClient.createTable(RecipeDynamo.TABLE_SCHEMA);
+        for (RecipeDynamo recipe : migratedRecipes.values()) {
+            tableRecipe.putItem(recipe);
+        }
+    }
+
+    private void migrateProductsPrivate() {
+        final DynamoDbTable<ProductDynamo> table = dynamoClient.createTable(ProductDynamo.TABLE_SCHEMA);
+        if (exist(ProductDynamo.KEY, table)) {
+            log.debug("Not possible to migrate products because they exist");
+            print(ProductDynamo.KEY, table);
+            return;
+        }
+
+        log.debug("Migrating products");
+        final DynamoDbTable<ProductOldDynamo> oldTable = dynamoClient.createTable(appConfig.dynamo().oldTableName(), ProductOldDynamo.TABLE_SCHEMA);
+
+        Key key = Key.builder()
+                .partitionValue("product")
+                .build();
+
+        PageIterable<ProductOldDynamo> results = oldTable.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
+        results.stream().forEach(page -> {
+            for (ProductOldDynamo productOld : page.items()) {
+                log.debug("Migrating from: " + productOld);
+
+                final ProductDynamo productDynamo = new ProductDynamo();
+                productDynamo.setId(IdFormat.createId());
+                final ProductDataDynamo productDataDynamo = new ProductDataDynamo();
+                productDataDynamo.setDescription(productOld.getDescription());
+                productDataDynamo.setName(productOld.getName());
+                productDataDynamo.setRecipeId(productOld.getRecipeName());
+                productDataDynamo.setNutritionalValues(getNutritionalValues(productOld.getNutritionalValues()));
+                productDynamo.setData(productDataDynamo);
+
+                log.debug("Migrating to: " + productDynamo);
+                migratedProducts.put(productDynamo.getData().getName().toLowerCase(), productDynamo);
+            }
+        });
+    }
+
+    private void migrateRecipesPrivate() {
+        final DynamoDbTable<RecipeDynamo> table = dynamoClient.createTable(RecipeDynamo.TABLE_SCHEMA);
+        if (exist(RecipeDynamo.KEY, table)) {
+            log.debug("Not possible to migrate recipes because they exist");
+            print(RecipeDynamo.KEY, table);
+            return;
+        }
+
+        log.debug("Migrating recipes");
+        final DynamoDbTable<RecipeOldDynamo> oldTable = dynamoClient.createTable(appConfig.dynamo().oldTableName(), RecipeOldDynamo.TABLE_SCHEMA);
+
+        Key key = Key.builder()
+                .partitionValue("recipe")
+                .build();
+
+        PageIterable<RecipeOldDynamo> results = oldTable.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
+        results.stream().forEach(page -> {
+            for (RecipeOldDynamo recipeOld : page.items()) {
+                log.debug("Migrating from: " + recipeOld);
+
+                final RecipeDynamo recipe = new RecipeDynamo();
+                recipe.setId(IdFormat.createId());
+                final RecipeDataDynamo recipeData = new RecipeDataDynamo();
+                recipeData.setDescription(recipeOld.getDescription());
+                recipeData.setName(recipeOld.getName());
+                recipeData.setProducts(getProducts(recipeOld.getProducts()));
+                recipeData.setNutritionalValues(getNutritionalValues(recipeOld.getNutritionalValues()));
+                recipe.setData(recipeData);
+
+                log.debug("Migrating to: " + recipe);
+                migratedRecipes.put(recipe.getData().getName().toLowerCase(), recipe);
+            }
+        });
+    }
 
     public void migrateUsers() {
         final DynamoDbTable<UserDynamo> table = dynamoClient.createTable(UserDynamo.TABLE_SCHEMA);
@@ -121,31 +227,27 @@ public class MigrationRepository {
 
                         final ArrayList<ProductValueDynamo> productValueDynamos = new ArrayList<>();
                         for (JsonNode product : items) {
-                            System.out.println(product);
-                            String name = product.has("name") ? product.get("name").asText() : null;
-                            String value = product.has("value") ? product.get("value").asText() : null;
-                            if (name == null || value == null) throw new RuntimeException("Name or value null");
-
-                            String recipeName = product.has("recipe_name") && product.get("recipe_name").isTextual() ? product.get("recipe_name").asText() : null;
                             final ProductValueDynamo productValueDynamo = new ProductValueDynamo();
-
-                            ProductDynamo productDynamo = productRepository.get().stream()
-                                    .filter(p -> p.getData() != null && name.equalsIgnoreCase(p.getData().getName()))
-                                    .findFirst().orElseThrow();
-                            productValueDynamo.setId(productDynamo.getId());
-
-                            productValueDynamo.setName(name);
-                            productValueDynamo.setQuantity(Double.valueOf(value));
-
-                            if (recipeName != null) {
-                                productValueDynamo.setUnit(productValueDynamo.getQuantity() > 1 ? "portions" : "portion");
-
-                                RecipeDynamo recipeDynamo = recipeRepository.get().stream()
-                                        .filter(r -> r.getData() != null && recipeName.equalsIgnoreCase(r.getData().getName()))
-                                        .findFirst().orElseThrow();
-                                productValueDynamo.setRecipeId(recipeDynamo.getId());
+                            final String name;
+                            if ("Carpaccio de remolacha, zanahoria y mozarella".equals(product.get("name").asText())) {
+                                name = "Carpaccio de remolacha, zanahoria y branza".toLowerCase();
+                            } else if ("Ensalada de col, rabano y zanahoria".equals(product.get("name").asText())) {
+                                name = "Ensalada de col, rabano, zanahoria y queso".toLowerCase();
+                            } else {
+                                name = product.get("name").asText().toLowerCase();
                             }
-
+                            final ProductDynamo productDynamo = migratedProducts.get(name);
+                            if (productDynamo == null) {
+                                throw new RuntimeException("Product null: " + product);
+                            }
+                            productValueDynamo.setId(productDynamo.getId());
+                            productValueDynamo.setUnit("g");
+                            productValueDynamo.setName(productDynamo.getData().getName());
+                            productValueDynamo.setQuantity(product.get("value").asDouble());
+                            productValueDynamo.setRecipeId(productDynamo.getData().getRecipeId());
+                            if (StringUtils.hasText(productValueDynamo.getRecipeId())) {
+                                productValueDynamo.setUnit(productValueDynamo.getQuantity() > 1 ? "portions" : "portion");
+                            }
                             productValueDynamos.add(productValueDynamo);
                         }
                         products.put(partOfDay, productValueDynamos);
@@ -241,5 +343,47 @@ public class MigrationRepository {
         return table.query(r -> r
                 .queryConditional(QueryConditional.keyEqualTo(key))
         ).stream().anyMatch(page -> !page.items().isEmpty());
+    }
+
+    private List<NutritionalValueDynamo> getNutritionalValues(JsonNode nutritionalValues) {
+        final List<NutritionalInformationDynamo> nutritionalInformationDynamos = nutritionalInformationRepository.get();
+        Map<String, NutritionalInformationDynamo> nutritionalInfoByShortName = new HashMap<>();
+        final ArrayList<NutritionalValueDynamo> nutritionalValueDynamos = new ArrayList<>();
+        for (NutritionalInformationDynamo ni : nutritionalInformationDynamos) {
+            if (ni.getData() == null || ni.getData().getName() == null)
+                throw new RuntimeException("NutritionalValue null: " + ni);
+            nutritionalInfoByShortName.put(ni.getData().getName().toLowerCase(), ni);
+        }
+
+        for (JsonNode nv : nutritionalValues) {
+            final NutritionalValueDynamo nutritionalValueDynamo = new NutritionalValueDynamo();
+            final NutritionalInformationDynamo nutritionalInformationDynamo;
+            if (nv.has("name")) {
+                nutritionalInformationDynamo = nutritionalInfoByShortName.get(nv.get("name").asText().toLowerCase());
+                nutritionalValueDynamo.setQuantity(nv.get("value").asDouble());
+            } else {
+                nutritionalInformationDynamo = nutritionalInfoByShortName.get(nv.get(0).asText().toLowerCase());
+                nutritionalValueDynamo.setQuantity(nv.get(2).asDouble());
+            }
+            nutritionalValueDynamo.setId(nutritionalInformationDynamo.getId());
+            nutritionalValueDynamo.setUnit(nutritionalInformationDynamo.getData().getUnit());
+            nutritionalValueDynamo.setName(nutritionalInformationDynamo.getData().getName());
+            nutritionalValueDynamo.setShortName(nutritionalInformationDynamo.getData().getShortName());
+            nutritionalValueDynamos.add(nutritionalValueDynamo);
+        }
+
+        return nutritionalValueDynamos;
+    }
+
+    private List<ProductValueDynamo> getProducts(JsonNode products) {
+        final ArrayList<ProductValueDynamo> productValueDynamos = new ArrayList<>();
+        for (JsonNode product : products) {
+            final ProductValueDynamo productValueDynamo = new ProductValueDynamo();
+            productValueDynamo.setName(product.get(0).asText().toLowerCase());
+            productValueDynamo.setQuantity(product.get(2).asDouble());
+            productValueDynamos.add(productValueDynamo);
+        }
+
+        return productValueDynamos;
     }
 }

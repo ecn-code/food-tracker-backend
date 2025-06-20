@@ -177,7 +177,7 @@ class UserControllerTest {
                 ErrorResponse.class
         );
 
-        assertEquals(HttpStatusCode.valueOf(403), response.getStatusCode());
+        assertEquals(HttpStatusCode.valueOf(419), response.getStatusCode());
         assertEquals("Token error", response.getBody().message());
     }
 

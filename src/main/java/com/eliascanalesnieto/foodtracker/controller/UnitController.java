@@ -2,6 +2,7 @@ package com.eliascanalesnieto.foodtracker.controller;
 
 import com.eliascanalesnieto.foodtracker.annotations.Auth;
 import com.eliascanalesnieto.foodtracker.dto.in.UnitRequest;
+import com.eliascanalesnieto.foodtracker.dto.out.PaginatedList;
 import com.eliascanalesnieto.foodtracker.dto.out.UnitResponse;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
@@ -28,8 +29,8 @@ public class UnitController {
     private final UnitService unitService;
 
     @GetMapping
-    public List<UnitResponse> get(@Auth final User currentUser) {
-        return unitService.get();
+    public PaginatedList<UnitResponse> get(@Auth final User currentUser) {
+        return new PaginatedList<>(unitService.get(), null);
     }
 
     @GetMapping("/{id}")

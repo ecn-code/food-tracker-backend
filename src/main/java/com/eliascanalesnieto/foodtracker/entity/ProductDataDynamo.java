@@ -1,14 +1,14 @@
 package com.eliascanalesnieto.foodtracker.entity;
 
-import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
 import java.util.List;
 
-@Getter
 @Setter
+@ToString
 @DynamoDbBean
 public class ProductDataDynamo {
     private String name;

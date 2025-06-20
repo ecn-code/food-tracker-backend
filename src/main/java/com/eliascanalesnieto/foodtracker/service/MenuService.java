@@ -82,7 +82,7 @@ public class MenuService {
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getShortName(), iv.getUnit(), iv.getQuantity()))
                         .collect(Collectors.toList())
                         : null
         );

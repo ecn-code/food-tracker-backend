@@ -14,6 +14,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @DynamoDbBean
 public class RecipeDynamo {
 
+    public RecipeDynamo() {
+        type = KEY.partitionKeyValue().s();
+    }
+
     public static final TableSchema<RecipeDynamo> TABLE_SCHEMA = TableSchema.fromBean(RecipeDynamo.class);
     public static final Key KEY = Key.builder().partitionValue("RECIPE_V2").build();
 

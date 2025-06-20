@@ -15,6 +15,7 @@ public class NutritionalValueDynamo {
     private String id;
     private String unit;
     private String name;
+    private String shortName;
     private Double quantity;
 
     @DynamoDbAttribute("id")
@@ -37,11 +38,17 @@ public class NutritionalValueDynamo {
         return unit;
     }
 
+    @DynamoDbAttribute("short_name")
+    public String getShortName() {
+        return shortName;
+    }
+
     public static NutritionalValueDynamo build(final NutritionalValueRequest itemValueRequest) {
         NutritionalValueDynamo d = new NutritionalValueDynamo();
         d.setId(itemValueRequest.id());
         d.setName(itemValueRequest.name());
         d.setUnit(itemValueRequest.unit());
+        d.setShortName(itemValueRequest.shortName());
         d.setQuantity(itemValueRequest.value());
         return d;
     }
@@ -51,6 +58,7 @@ public class NutritionalValueDynamo {
         d.setId(itemValue.id());
         d.setName(itemValue.name());
         d.setUnit(itemValue.unit());
+        d.setShortName(itemValue.shortName());
         d.setQuantity(itemValue.value());
         return d;
     }

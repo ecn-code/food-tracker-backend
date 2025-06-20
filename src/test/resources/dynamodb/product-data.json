@@ -16,6 +16,7 @@
                     "M": {
                       "id": { "S": "1" },
                       "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
                       "quantity": { "N": "60" }
                     }
@@ -43,6 +44,7 @@
                     "M": {
                       "id": { "S": "1" },
                       "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
                       "quantity": { "N": "250" }
                     }

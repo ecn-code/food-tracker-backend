@@ -36,6 +36,7 @@ public class NutritionalValueCalculator {
                         (iv1, iv2) -> new ItemValue(
                                 iv1.id(),
                                 iv1.name(),
+                                iv1.shortName(),
                                 iv1.unit(),
                                 iv1.value() + iv2.value()
                         )
@@ -46,7 +47,7 @@ public class NutritionalValueCalculator {
         double factor = getValue(productValueRequest.recipeId(), productValueRequest.value()) / 100.0;
         return productDynamo.getData().getNutritionalValues().stream()
                 .map(nv -> new ItemValue(
-                        nv.getId(), nv.getName(), nv.getUnit(), nv.getQuantity() * factor
+                        nv.getId(), nv.getName(), nv.getShortName(), nv.getUnit(), nv.getQuantity() * factor
                 )).toList();
     }
 

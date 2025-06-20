@@ -15,24 +15,13 @@ public class MigrationController {
 
     private final MigrationRepository migrationRepository;
 
-    @GetMapping("/users")
-    public void users() {
+    @GetMapping
+    public void migrate() {
         migrationRepository.migrateUsers();
-    }
-
-    @GetMapping("/weekly-menus")
-    public void weeklyMenus() {
-        migrationRepository.migrateWeeklyMenus();
-    }
-
-    @GetMapping("/nutritional-value")
-    public void nutritionalValue() {
-        migrationRepository.migrateNutritionalValue();
-    }
-
-    @GetMapping("/settings")
-    public void settings() {
         migrationRepository.migrateSettings();
+        migrationRepository.migrateNutritionalValue();
+        migrationRepository.migrateProductsAndRecipes();
+        migrationRepository.migrateWeeklyMenus();
     }
 
 }

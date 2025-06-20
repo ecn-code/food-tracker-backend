@@ -37,6 +37,7 @@
                     "M": {
                       "id": { "S": "1" },
                       "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
                       "quantity": { "N": "800" }
                     }
@@ -94,6 +95,7 @@
                     "M": {
                       "id": { "S": "1" },
                       "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
                       "quantity": { "N": "800" }
                     }

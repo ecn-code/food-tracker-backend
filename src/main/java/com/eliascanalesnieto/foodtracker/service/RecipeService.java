@@ -2,6 +2,7 @@ package com.eliascanalesnieto.foodtracker.service;
 
 import com.eliascanalesnieto.foodtracker.dto.in.RecipeRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.ProductValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.RecipeResponse;
 import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
@@ -68,12 +69,12 @@ public class RecipeService {
                 data.getDescription(),
                 data.getProducts() != null
                         ? data.getProducts().stream()
-                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
                         .collect(Collectors.toList())
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getShortName(), iv.getUnit(), iv.getQuantity()))
                         .collect(Collectors.toList())
                         : null
         );

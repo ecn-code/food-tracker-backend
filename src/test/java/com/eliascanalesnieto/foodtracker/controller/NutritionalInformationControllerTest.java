@@ -6,6 +6,7 @@ import com.eliascanalesnieto.foodtracker.dto.in.NutritionalInformationRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.LoginResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.NutritionalInformationResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.PaginatedList;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +42,7 @@ class NutritionalInformationControllerTest {
 
     @Test
     void getAll() {
-        ResponseEntity<List<NutritionalInformationResponse>> response = testRestTemplate.exchange(
+        ResponseEntity<PaginatedList<NutritionalInformationResponse>> response = testRestTemplate.exchange(
                 NUTRITIONAL_INFORMATION,
                 HttpMethod.GET,
                 login(),
@@ -53,9 +54,11 @@ class NutritionalInformationControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(
-                        List.of(
-                                new NutritionalInformationResponse("1", "kcal", "Kilocaloría", "kcal"),
-                                new NutritionalInformationResponse("2", "prot", "Proteína", "g")
+                        new PaginatedList<>(
+                                List.of(
+                                        new NutritionalInformationResponse("1", "kcal", "Kilocaloría", "kcal"),
+                                        new NutritionalInformationResponse("2", "prot", "Proteína", "g")
+                                ), null
                         )
                 );
     }

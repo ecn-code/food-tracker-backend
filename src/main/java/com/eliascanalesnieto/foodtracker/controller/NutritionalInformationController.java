@@ -3,6 +3,7 @@ package com.eliascanalesnieto.foodtracker.controller;
 import com.eliascanalesnieto.foodtracker.annotations.Auth;
 import com.eliascanalesnieto.foodtracker.dto.in.NutritionalInformationRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.NutritionalInformationResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.PaginatedList;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
 import com.eliascanalesnieto.foodtracker.model.User;
@@ -10,8 +11,6 @@ import com.eliascanalesnieto.foodtracker.service.NutritionalInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/nutritional-information")
@@ -21,8 +20,8 @@ public class NutritionalInformationController {
     private final NutritionalInformationService nutritionalInformationService;
 
     @GetMapping
-    public List<NutritionalInformationResponse> get(@Auth final User currentUser) {
-        return nutritionalInformationService.get();
+    public PaginatedList<NutritionalInformationResponse> get(@Auth final User currentUser) {
+        return new PaginatedList<>(nutritionalInformationService.get(), null);
     }
 
     @GetMapping("/{id}")

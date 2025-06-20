@@ -1,7 +1,7 @@
 package com.eliascanalesnieto.foodtracker.entity;
 
-import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
@@ -9,10 +9,14 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 
-@Getter
 @Setter
+@ToString
 @DynamoDbBean
 public class ProductDynamo {
+
+    public ProductDynamo() {
+        type = KEY.partitionKeyValue().s();
+    }
 
     public static final TableSchema<ProductDynamo> TABLE_SCHEMA = TableSchema.fromBean(ProductDynamo.class);
     public static final Key KEY = Key.builder().partitionValue("PRODUCT_V2").build();

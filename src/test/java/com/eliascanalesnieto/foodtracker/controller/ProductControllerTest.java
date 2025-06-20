@@ -109,7 +109,7 @@ class ProductControllerTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new ProductResponse(null, "name", "desc", "",
-                        List.of(new NutritionalValueResponse("1", "ni", "g", 3d))));
+                        List.of(new NutritionalValueResponse("1", "ni", "g", "k",3d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -167,7 +167,7 @@ class ProductControllerTest {
                 HttpMethod.PUT,
                 login(new ProductRequest(product.id(), product.name() + "-m", product.description(), product.recipeId(),
                         product.nutritionalValues().stream()
-                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.unit(), i.value()))
+                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.shortName(), i.unit(), i.value()))
                                 .toList())),
                 new ParameterizedTypeReference<>() {
                 }
@@ -183,7 +183,7 @@ class ProductControllerTest {
                 HttpMethod.PUT,
                 login(new ProductRequest(product.id(), product.name(), product.description(), product.recipeId(),
                         product.nutritionalValues().stream()
-                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.unit(), i.value()))
+                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.shortName(), i.unit(), i.value()))
                                 .toList())),
                 new ParameterizedTypeReference<>() {
                 }
@@ -266,17 +266,17 @@ class ProductControllerTest {
 
     private static ProductResponse getProduct2() {
         return new ProductResponse("2", "Pan", "Pan integral", "1",
-                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 250d)));
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",250d)));
     }
 
     private static ProductResponse getProduct1() {
         return new ProductResponse("1", "Leche", "Leche entera de vaca", "",
-                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 60d)));
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",60d)));
     }
 
     private static ProductRequest getProductRequest(final String id, final String name) {
         final String description = "desc";
-        final List<NutritionalValueRequest> nutritionalValues = List.of(new NutritionalValueRequest("1", "ni", "g", 3d));
+        final List<NutritionalValueRequest> nutritionalValues = List.of(new NutritionalValueRequest("1", "ni", "g", "k",3d));
 
         return new ProductRequest(id, name, description, "", nutritionalValues);
     }

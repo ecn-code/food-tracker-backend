@@ -117,7 +117,7 @@ class MenuControllerTest {
                 .usingRecursiveComparison()
                 .isEqualTo(new MenuResponse("2025-10-10", "name",
                         Map.of("Almuerzo", List.of(new ProductValueResponse("1", "p1", null, "portions", 5d))),
-                        List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 300d))));
+                        List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 300d))));
 
         final ResponseEntity<Object> delete = testRestTemplate.exchange(
                 MENUS + "/" + IdFormat.format(response.getBody().date(), response.getBody().username()),
@@ -190,7 +190,7 @@ class MenuControllerTest {
                                                         new ProductValueResponse(item.id(), item.name(), item.recipeId(), item.unit(), item.value())
                                                 ).toList()
                                 )
-                        ), List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 310d))));
+                        ), List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 310d))));
 
         testRestTemplate.exchange(
                 MENUS + "/" + date + "#" + username,
@@ -291,7 +291,7 @@ class MenuControllerTest {
                 Map.of("Cena", List.of(new ProductValueResponse("1", "Patata", null, "g", 500d),
                         new ProductValueResponse("2", "Huevo", null, "unidad", 4d),
                         new ProductValueResponse("3", "Jamon", "1", "portion", 40d))),
-                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 800d)));
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 800d)));
     }
 
     @SneakyThrows
@@ -299,7 +299,7 @@ class MenuControllerTest {
         return new MenuResponse("2025-01-12", "user3",
                 Map.of("Almuerzo", List.of(new ProductValueResponse("1", "Patata", null, "g", 500d),
                         new ProductValueResponse("2", "Huevo", null, "unidad", 4d))),
-                List.of(new NutritionalValueResponse("1", "Calorías", "kcal", 800d)));
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 800d)));
     }
 
     private static MenuRequest getMenuRequest(final Date date, final String username) {
