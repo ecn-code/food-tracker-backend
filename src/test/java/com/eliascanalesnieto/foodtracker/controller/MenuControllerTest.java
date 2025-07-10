@@ -116,8 +116,8 @@ class MenuControllerTest {
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(new MenuResponse("2025-10-10", "name",
-                        Map.of("Almuerzo", List.of(new ProductValueResponse("1", "p1", null, "portions", 5d))),
-                        List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 300d))));
+                        Map.of("Almuerzo", List.of(new ProductValueResponse("1", "Leche", "Leche entera de vaca", null, "g", 5d))),
+                        List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 3d))));
 
         final ResponseEntity<Object> delete = testRestTemplate.exchange(
                 MENUS + "/" + IdFormat.format(response.getBody().date(), response.getBody().username()),
@@ -169,7 +169,7 @@ class MenuControllerTest {
                                         items -> items.getValue()
                                                 .stream()
                                                 .map(item ->
-                                                        new ProductValueRequest(item.id(), item.name(), item.recipeId(), item.unit(), item.value())
+                                                        new ProductValueRequest(item.id(), item.value())
                                                 ).toList()
                                 )
                         )
@@ -187,10 +187,12 @@ class MenuControllerTest {
                                         items -> items.getValue()
                                                 .stream()
                                                 .map(item ->
-                                                        new ProductValueResponse(item.id(), item.name(), item.recipeId(), item.unit(), item.value())
+                                                        new ProductValueResponse(item.id(), item.name(),
+                                                                item.description(), item.recipeId(), item.unit(),
+                                                                item.value())
                                                 ).toList()
                                 )
-                        ), List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 310d))));
+                        ), List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 330d))));
 
         testRestTemplate.exchange(
                 MENUS + "/" + date + "#" + username,
@@ -201,7 +203,7 @@ class MenuControllerTest {
                                         items -> items.getValue()
                                                 .stream()
                                                 .map(item ->
-                                                        new ProductValueRequest(item.id(), item.name(), item.recipeId(), item.unit(), item.value())
+                                                        new ProductValueRequest(item.id(), item.value())
                                                 ).toList()
                                 )
                         )
@@ -264,7 +266,7 @@ class MenuControllerTest {
         return login(null);
     }
 
-    private HttpEntity<MenuRequest> login(final MenuRequest MenuRequest) {
+    private HttpEntity<MenuRequest> login(final MenuRequest menuRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic %s".formatted(Base64.getEncoder().encodeToString("username:password".getBytes(StandardCharsets.UTF_8))));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -282,29 +284,29 @@ class MenuControllerTest {
         headers.set("Authorization", "Bearer %s".formatted(loginResponse.getBody().token()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new HttpEntity<>(MenuRequest, headers);
+        return new HttpEntity<>(menuRequest, headers);
     }
 
     @SneakyThrows
     private static MenuResponse getMenu2() {
         return new MenuResponse("2025-12-12", "user",
-                Map.of("Cena", List.of(new ProductValueResponse("1", "Patata", null, "g", 500d),
-                        new ProductValueResponse("2", "Huevo", null, "unidad", 4d),
-                        new ProductValueResponse("3", "Jamon", "1", "portion", 40d))),
+                Map.of("Cena", List.of(new ProductValueResponse("3", "Patata", "Patata integral", null, "g", 500d),
+                        new ProductValueResponse("4", "Huevo", null, "2", "portions", 4d),
+                        new ProductValueResponse("5", "Jamon", null, "1", "portion", 40d))),
                 List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 800d)));
     }
 
     @SneakyThrows
     private static MenuResponse getMenu1() {
         return new MenuResponse("2025-01-12", "user3",
-                Map.of("Almuerzo", List.of(new ProductValueResponse("1", "Patata", null, "g", 500d),
-                        new ProductValueResponse("2", "Huevo", null, "unidad", 4d))),
+                Map.of("Almuerzo", List.of(new ProductValueResponse("3", "Patata", "Patata integral", null, "g", 500d),
+                        new ProductValueResponse("4", "Huevo", null, "2", "portions", 4d))),
                 List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 800d)));
     }
 
     private static MenuRequest getMenuRequest(final Date date, final String username) {
         final Map<String, List<ProductValueRequest>> products = Map.of("Almuerzo",
-                List.of(new ProductValueRequest("1", "p1", "1", "portions", 5d)));
+                List.of(new ProductValueRequest("1", 5d)));
 
         return new MenuRequest(date, username, products);
     }

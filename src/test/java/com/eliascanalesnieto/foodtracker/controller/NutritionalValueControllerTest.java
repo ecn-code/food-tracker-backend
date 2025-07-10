@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(MockConfig.class)
-class NutritionalInformationControllerTest {
+class NutritionalValueControllerTest {
 
     private static final String LOGIN = "/users/login";
     private static final String NUTRITIONAL_INFORMATION = "/nutritional-information";

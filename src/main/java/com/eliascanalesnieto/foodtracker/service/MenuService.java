@@ -1,6 +1,7 @@
 package com.eliascanalesnieto.foodtracker.service;
 
 import com.eliascanalesnieto.foodtracker.dto.in.MenuRequest;
+import com.eliascanalesnieto.foodtracker.dto.in.ProductValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.MenuResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.ProductValueResponse;
@@ -10,6 +11,7 @@ import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
 import com.eliascanalesnieto.foodtracker.model.ItemValue;
 import com.eliascanalesnieto.foodtracker.model.Menu;
+import com.eliascanalesnieto.foodtracker.model.NutritionalValue;
 import com.eliascanalesnieto.foodtracker.repository.MenuRepository;
 import com.eliascanalesnieto.foodtracker.repository.ProductRepository;
 import com.eliascanalesnieto.foodtracker.utils.DateFormat;
@@ -19,6 +21,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +67,7 @@ public class MenuService {
     }
 
     @SneakyThrows
-    private MenuResponse toResponse(MenuDynamo menuDynamo) {
+    private MenuResponse toResponse(final MenuDynamo menuDynamo) {
         var data = menuDynamo.getData();
         return new MenuResponse(
                 DateFormat.format(menuDynamo.getDate()),
@@ -75,7 +78,8 @@ public class MenuService {
                                 Map.Entry::getKey,
                                 e -> e.getValue() != null
                                         ? e.getValue().stream()
-                                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
+                                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(),
+                                                iv.getDescription(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
                                         .collect(Collectors.toList())
                                         : null
                         ))
@@ -89,14 +93,31 @@ public class MenuService {
     }
 
     private Menu getMenuWithNutritionalValues(final MenuRequest menuRequest) {
-        final Collection<ItemValue> nutritionalValues = NutritionalValueCalculator.mergeListOfLists(
-                menuRequest.products().values(), this::getProduct);
+        final Map<String, List<ItemValue>> menus = menuRequest.products().entrySet()
+                .stream()
+                .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), getProducts(entry.getValue())))
+                .collect(
+                        Collectors.toMap(
+                                AbstractMap.SimpleEntry::getKey,
+                                AbstractMap.SimpleEntry::getValue
+                        )
+                );
 
-        return Menu.build(menuRequest, nutritionalValues);
+        final Collection<NutritionalValue> nutritionalValues = NutritionalValueCalculator.mergeListOfLists(menus.values());
+
+        return Menu.build(menuRequest, menus, nutritionalValues);
+    }
+
+    private List<ItemValue> getProducts(final List<ProductValueRequest> productValueRequests) {
+        return productValueRequests.stream()
+                .map(productValueRequest -> ItemValue.buildFromProductValue(
+                        getProduct(productValueRequest),
+                        productValueRequest.value()
+                )).toList();
     }
 
     @SneakyThrows
-    private ProductDynamo getProduct(final String id) {
-        return productRepository.get(id);
+    private ProductDynamo getProduct(final ProductValueRequest productValueRequest) {
+        return productRepository.get(productValueRequest.id());
     }
 }

@@ -1,5 +1,6 @@
 package com.eliascanalesnieto.foodtracker.service;
 
+import com.eliascanalesnieto.foodtracker.dto.in.ProductValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.RecipeRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.ProductValueResponse;
@@ -9,6 +10,7 @@ import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
 import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.NutritionalValue;
 import com.eliascanalesnieto.foodtracker.model.Recipe;
 import com.eliascanalesnieto.foodtracker.repository.ProductRepository;
 import com.eliascanalesnieto.foodtracker.repository.RecipeRepository;
@@ -69,7 +71,7 @@ public class RecipeService {
                 data.getDescription(),
                 data.getProducts() != null
                         ? data.getProducts().stream()
-                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(), iv.getDescription(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
                         .collect(Collectors.toList())
                         : null,
                 data.getNutritionalValues() != null
@@ -81,13 +83,18 @@ public class RecipeService {
     }
 
     private Recipe getRecipeWithNutritionalValues(final RecipeRequest recipeRequest) {
-        final Collection<ItemValue> nutritionalValues = NutritionalValueCalculator.mergeList(recipeRequest.products(), this::getProduct);
+        final List<ItemValue> products = recipeRequest.products().stream()
+                .map(productValueRequest ->
+                        ItemValue.buildFromProductValue(getProduct(productValueRequest), productValueRequest.value())
+                ).toList();
 
-        return Recipe.build(recipeRequest, nutritionalValues);
+        final Collection<NutritionalValue> nutritionalValues = NutritionalValueCalculator.mergeList(products);
+
+        return Recipe.build(recipeRequest, products, nutritionalValues);
     }
 
     @SneakyThrows
-    private ProductDynamo getProduct(final String id) {
-        return productRepository.get(id);
+    private ProductDynamo getProduct(final ProductValueRequest productValueRequest) {
+        return productRepository.get(productValueRequest.id());
     }
 }

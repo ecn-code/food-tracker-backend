@@ -57,7 +57,10 @@ class ProductControllerTest {
                 .isEqualTo(
                         List.of(
                                 getProduct1(),
-                                getProduct2()
+                                getProduct2(),
+                                getProduct3(),
+                                getProduct4(),
+                                getProduct5()
                         )
                 );
     }
@@ -270,8 +273,23 @@ class ProductControllerTest {
     }
 
     private static ProductResponse getProduct1() {
-        return new ProductResponse("1", "Leche", "Leche entera de vaca", "",
+        return new ProductResponse("1", "Leche", "Leche entera de vaca", null,
                 List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",60d)));
+    }
+
+    private static ProductResponse getProduct3() {
+        return new ProductResponse("3", "Patata", "Patata integral", null,
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",50d)));
+    }
+
+    private static ProductResponse getProduct4() {
+        return new ProductResponse("4", "Huevo", null, "2",
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",20d)));
+    }
+
+    private static ProductResponse getProduct5() {
+        return new ProductResponse("5", "Jamon", null, "1",
+                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",750d)));
     }
 
     private static ProductRequest getProductRequest(final String id, final String name) {

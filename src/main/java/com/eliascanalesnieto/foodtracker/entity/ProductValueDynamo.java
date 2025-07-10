@@ -1,6 +1,5 @@
 package com.eliascanalesnieto.foodtracker.entity;
 
-import com.eliascanalesnieto.foodtracker.dto.in.ProductValueRequest;
 import com.eliascanalesnieto.foodtracker.model.ItemValue;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +14,7 @@ public class ProductValueDynamo {
     private String id;
     private String unit;
     private String name;
+    private String description;
     private String recipeId;
     private Double quantity;
 
@@ -43,19 +43,17 @@ public class ProductValueDynamo {
         return recipeId;
     }
 
-    public static ProductValueDynamo build(final ProductValueRequest itemValueRequest) {
-        ProductValueDynamo d = new ProductValueDynamo();
-        d.setId(itemValueRequest.id());
-        d.setName(itemValueRequest.name());
-        d.setUnit(itemValueRequest.unit());
-        d.setQuantity(itemValueRequest.value());
-        return d;
+    @DynamoDbAttribute("description")
+    public String getDescription() {
+        return description;
     }
 
     public static ProductValueDynamo build(final ItemValue itemValue) {
         ProductValueDynamo d = new ProductValueDynamo();
         d.setId(itemValue.id());
         d.setName(itemValue.name());
+        d.setDescription(itemValue.description());
+        d.setRecipeId(itemValue.recipeId());
         d.setUnit(itemValue.unit());
         d.setQuantity(itemValue.value());
         return d;

@@ -13,17 +13,19 @@
                     "L": [
                       {
                         "M": {
-                          "id": { "S": "1" },
+                          "id": { "S": "3" },
                           "name": { "S": "Patata" },
+                          "description": { "S": "Patata integral" },
                           "unit": { "S": "g" },
                           "quantity": { "N": "500" }
                         }
                       },
                       {
                         "M": {
-                          "id": { "S": "2" },
+                          "id": { "S": "4" },
                           "name": { "S": "Huevo" },
-                          "unit": { "S": "unidad" },
+                          "recipe_id": { "S": "2" },
+                          "unit": { "S": "portions" },
                           "quantity": { "N": "4" }
                         }
                       }
@@ -62,23 +64,25 @@
                     "L": [
                       {
                         "M": {
-                          "id": { "S": "1" },
+                          "id": { "S": "3" },
                           "name": { "S": "Patata" },
+                          "description": { "S": "Patata integral" },
                           "unit": { "S": "g" },
                           "quantity": { "N": "500" }
                         }
                       },
                       {
                         "M": {
-                          "id": { "S": "2" },
+                          "id": { "S": "4" },
                           "name": { "S": "Huevo" },
-                          "unit": { "S": "unidad" },
+                          "recipe_id": { "S": "2" },
+                          "unit": { "S": "portions" },
                           "quantity": { "N": "4" }
                         }
                       },
                       {
                         "M": {
-                          "id": { "S": "3" },
+                          "id": { "S": "5" },
                           "name": { "S": "Jamon" },
                           "recipe_id": { "S": "1" },
                           "unit": { "S": "portion" },

@@ -2,6 +2,7 @@ package com.eliascanalesnieto.foodtracker.entity;
 
 import com.eliascanalesnieto.foodtracker.dto.in.NutritionalValueRequest;
 import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.NutritionalValue;
 import lombok.Setter;
 import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
@@ -41,6 +42,16 @@ public class NutritionalValueDynamo {
     @DynamoDbAttribute("short_name")
     public String getShortName() {
         return shortName;
+    }
+
+    public static NutritionalValueDynamo build(final NutritionalValue nutritionalValue) {
+        NutritionalValueDynamo d = new NutritionalValueDynamo();
+        d.setId(nutritionalValue.id());
+        d.setName(nutritionalValue.name());
+        d.setUnit(nutritionalValue.unit());
+        d.setShortName(nutritionalValue.shortName());
+        d.setQuantity(nutritionalValue.value());
+        return d;
     }
 
     public static NutritionalValueDynamo build(final NutritionalValueRequest itemValueRequest) {

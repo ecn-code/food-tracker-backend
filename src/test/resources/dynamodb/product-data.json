@@ -9,7 +9,6 @@
             "M": {
               "name": { "S": "Leche" },
               "description": { "S": "Leche entera de vaca" },
-              "recipe_id": { "S": "" },
               "nutritional_values": {
                 "L": [
                   {
@@ -47,6 +46,87 @@
                       "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
                       "quantity": { "N": "250" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "PRODUCT_V2" },
+          "SK": { "S": "3" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Patata" },
+              "description": { "S": "Patata integral" },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "id": { "S": "1" },
+                      "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "50" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "PRODUCT_V2" },
+          "SK": { "S": "4" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Huevo" },
+              "recipe_id": { "S": "2" },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "id": { "S": "1" },
+                      "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "20" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": { "S": "PRODUCT_V2" },
+          "SK": { "S": "5" },
+          "additional_data": {
+            "M": {
+              "name": { "S": "Jamon" },
+              "recipe_id": { "S": "1" },
+              "nutritional_values": {
+                "L": [
+                  {
+                    "M": {
+                      "id": { "S": "1" },
+                      "name": { "S": "Calorías" },
+                      "short_name": { "S": "cal" },
+                      "unit": { "S": "kcal" },
+                      "quantity": { "N": "750" }
                     }
                   }
                 ]
