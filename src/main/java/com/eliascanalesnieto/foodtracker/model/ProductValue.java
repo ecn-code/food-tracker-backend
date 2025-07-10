@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 public record ItemValue(String id, String name, String shortName, String description, String unit, Double value, String recipeId,
-                        List<NutritionalValue> nutritionalValueList) {
+                        List<NutritionalValue> nutritionalValues) {
 
     public boolean isRecipe() {
         return StringUtils.hasText(recipeId);
@@ -34,7 +34,7 @@ public record ItemValue(String id, String name, String shortName, String descrip
                 item.unit(),
                 item.value(),
                 item.recipeId(),
-                NutritionalValue.applyFactor(item.nutritionalValueList(), factor)
+                NutritionalValue.applyFactor(item.nutritionalValues(), factor)
         );
     }
 }
