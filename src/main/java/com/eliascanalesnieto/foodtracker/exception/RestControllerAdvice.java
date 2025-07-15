@@ -2,6 +2,7 @@ package com.eliascanalesnieto.foodtracker.exception;
 
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,8 +22,8 @@ public class RestControllerAdvice {
         return ResponseEntity.status(HttpStatusCode.valueOf(403)).body(new ErrorResponse(authorizationException.getMessage()));
     }
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ErrorResponse> handle(final ExpiredJwtException authorizationException) {
+    @ExceptionHandler({ExpiredJwtException.class, SignatureException.class})
+    public ResponseEntity<ErrorResponse> handle(final Exception exception) {
         return ResponseEntity.status(HttpStatusCode.valueOf(419)).body(new ErrorResponse("Token error"));
     }
 

@@ -117,7 +117,7 @@ class MenuControllerTest {
                 .usingRecursiveComparison()
                 .isEqualTo(new MenuResponse("2025-10-10", "name",
                         Map.of("Almuerzo", List.of(new ProductValueResponse("1", "Leche", "Leche entera de vaca", null, "g", 5d))),
-                        List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 3d))));
+                        List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 3d))));
 
         final ResponseEntity<Object> delete = testRestTemplate.exchange(
                 MENUS + "/" + IdFormat.format(response.getBody().date(), response.getBody().username()),
@@ -192,7 +192,7 @@ class MenuControllerTest {
                                                                 item.value())
                                                 ).toList()
                                 )
-                        ), List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 330d))));
+                        ), List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 330d))));
 
         testRestTemplate.exchange(
                 MENUS + "/" + date + "#" + username,

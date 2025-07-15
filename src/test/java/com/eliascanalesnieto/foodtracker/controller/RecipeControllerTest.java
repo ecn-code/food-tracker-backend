@@ -112,7 +112,7 @@ class RecipeControllerTest {
                 .isEqualTo(new RecipeResponse(null, "name", "Receta tradicional española",
                         List.of(new ProductValueResponse("1", "Leche", "Leche entera de vaca", null, "g", 500d),
                                 new ProductValueResponse("2", "Pan", "Pan integral", "1", "portions", 4d)),
-                        List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 1300d))));
+                        List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 1300d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -171,7 +171,7 @@ class RecipeControllerTest {
                 .isEqualTo(new RecipeResponse(id, name + "-m", "Receta tradicional española",
                         List.of(new ProductValueResponse("1", "Leche", "Leche entera de vaca", null, "g", 500d),
                                 new ProductValueResponse("2", "Pan", "Pan integral", "1", "portions", 4d)),
-                        List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal", 1300d))));
+                        List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 1300d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + id,

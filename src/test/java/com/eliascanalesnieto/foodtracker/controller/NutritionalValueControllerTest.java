@@ -56,7 +56,7 @@ class NutritionalValueControllerTest {
                 .isEqualTo(
                         new PaginatedList<>(
                                 List.of(
-                                        new NutritionalInformationResponse("1", "kcal", "Kilocaloría", "kcal"),
+                                        new NutritionalInformationResponse("1", "kcal", "Kilocaloría", "k"),
                                         new NutritionalInformationResponse("2", "prot", "Proteína", "g")
                                 ), null
                         )
@@ -77,7 +77,7 @@ class NutritionalValueControllerTest {
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertThat(response.getBody())
                 .usingRecursiveComparison()
-                .isEqualTo(new NutritionalInformationResponse(id, "kcal", "Kilocaloría", "kcal"));
+                .isEqualTo(new NutritionalInformationResponse(id, "kcal", "Kilocaloría", "k"));
     }
 
     @Test

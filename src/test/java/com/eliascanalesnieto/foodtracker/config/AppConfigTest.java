@@ -21,6 +21,7 @@ class AppConfigTest {
                 .ignoringFields("dynamo.endpoint")
                 .isEqualTo(
                         new AppConfig(
+                                "http://localhost:8080",
                                 new CryptoConfig("E/bl0m55SLr1CFpHawud7nqV4oflUIi5PlEEy0RFAxI=", 5000),
                                 new DynamoDBConfig("http", "food-tracker", "food-tracker-v2")
                         )

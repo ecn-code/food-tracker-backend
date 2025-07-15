@@ -2,7 +2,9 @@ package com.eliascanalesnieto.foodtracker.controller;
 
 import com.eliascanalesnieto.foodtracker.annotations.Auth;
 import com.eliascanalesnieto.foodtracker.dto.in.ProductRequest;
+import com.eliascanalesnieto.foodtracker.dto.out.PaginatedList;
 import com.eliascanalesnieto.foodtracker.dto.out.ProductResponse;
+import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
 import com.eliascanalesnieto.foodtracker.model.User;
@@ -10,8 +12,10 @@ import com.eliascanalesnieto.foodtracker.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
@@ -21,8 +25,12 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponse> get(@Auth final User currentUser) {
-        return productService.get();
+    public PaginatedList<ProductResponse> get(@Auth final User currentUser,
+                                              @RequestParam("items_per_page") Integer itemsPerPage,
+                                              @RequestParam(required = false, value = "last_evaluated_key") String lastEvaluatedKey,
+                                              @RequestParam(required = false, value = "query") String query
+    ) {
+        return productService.get(itemsPerPage, PaginatedList.decodeLastEvaluatedKey(lastEvaluatedKey), query);
     }
 
     @GetMapping("/{id}")

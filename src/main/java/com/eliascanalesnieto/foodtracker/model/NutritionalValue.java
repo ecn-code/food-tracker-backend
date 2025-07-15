@@ -1,18 +1,20 @@
 package com.eliascanalesnieto.foodtracker.model;
 
+import com.eliascanalesnieto.foodtracker.dto.in.NutritionalValueRequest;
+import com.eliascanalesnieto.foodtracker.entity.NutritionalInformationDynamo;
 import com.eliascanalesnieto.foodtracker.entity.NutritionalValueDynamo;
 
 import java.util.List;
 
 public record NutritionalValue(String id, String shortName, String name, String unit, Double value) {
 
-    public static NutritionalValue buildFromNutritionalValue(final NutritionalValueDynamo nutritionalValueDynamo) {
+    public static NutritionalValue build(final NutritionalValueDynamo nutritionalValueDynamo) {
         return new NutritionalValue(
                 nutritionalValueDynamo.getId(),
                 nutritionalValueDynamo.getShortName(),
                 nutritionalValueDynamo.getName(),
                 nutritionalValueDynamo.getUnit(),
-                nutritionalValueDynamo.getQuantity()
+                nutritionalValueDynamo.getValue()
         );
     }
 
@@ -23,6 +25,17 @@ public record NutritionalValue(String id, String shortName, String name, String 
                 nutritionalValue.name(),
                 nutritionalValue.unit(),
                 nutritionalValue.value() * factor
+        );
+    }
+
+    public static NutritionalValue build(final NutritionalValueRequest nutritionalValueRequest,
+                                               final NutritionalInformationDynamo nutritionalInformationDynamo) {
+        return new NutritionalValue(
+                nutritionalValueRequest.id(),
+                nutritionalInformationDynamo.getData().getShortName(),
+                nutritionalInformationDynamo.getData().getName(),
+                nutritionalInformationDynamo.getData().getUnit(),
+                nutritionalValueRequest.value()
         );
     }
 

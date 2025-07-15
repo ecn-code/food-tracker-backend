@@ -2,6 +2,7 @@ package com.eliascanalesnieto.foodtracker.entity;
 
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
@@ -34,5 +35,21 @@ public class ProductDataDynamo {
     @DynamoDbAttribute("nutritional_values")
     public List<NutritionalValueDynamo> getNutritionalValues() {
         return nutritionalValues;
+    }
+
+    public String getFindBy() {
+        final StringBuilder findBy = new StringBuilder();
+
+        if(StringUtils.hasText(getName())) {
+            findBy.append(getName());
+            findBy.append(" ");
+        }
+
+        if(StringUtils.hasText(getDescription())) {
+            findBy.append(getDescription());
+            findBy.append(" ");
+        }
+
+        return findBy.toString().toLowerCase();
     }
 }

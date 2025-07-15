@@ -24,6 +24,7 @@ public class MockConfig {
 
         String[] files = {
                 "food-tracker-v2.json",
+                "index-v2.json",
                 "user-data.json",
                 "unit-data.json",
                 "nutritional-information-data.json",
@@ -49,6 +50,7 @@ public class MockConfig {
     public IEnvService envServiceMock() {
         return key -> """
                     {
+                        "origin": "http://localhost:8080",
                         "crypto": { "key": "E/bl0m55SLr1CFpHawud7nqV4oflUIi5PlEEy0RFAxI=","expirationTimeMillis": 5000},
                         "dynamo": {"endpoint": "%s", "oldTableName": "food-tracker", "tableName": "food-tracker-v2"}
                     }

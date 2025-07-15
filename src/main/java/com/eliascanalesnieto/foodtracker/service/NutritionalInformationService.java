@@ -25,7 +25,9 @@ public class NutritionalInformationService {
                         ni.getData().getShortName(),
                         ni.getData().getName(),
                         ni.getData().getUnit())
-                ).toList();
+                )
+                .sorted()
+                .toList();
     }
 
     public NutritionalInformationResponse get(final String id) throws EntityNotFoundException {

@@ -21,7 +21,10 @@ public class NutritionalInformationController {
 
     @GetMapping
     public PaginatedList<NutritionalInformationResponse> get(@Auth final User currentUser) {
-        return new PaginatedList<>(nutritionalInformationService.get(), null);
+        return new PaginatedList<>(
+                nutritionalInformationService.get(),
+                null
+        );
     }
 
     @GetMapping("/{id}")

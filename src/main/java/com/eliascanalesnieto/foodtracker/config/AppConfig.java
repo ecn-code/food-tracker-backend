@@ -1,4 +1,4 @@
 package com.eliascanalesnieto.foodtracker.config;
 
-public record AppConfig(CryptoConfig crypto, DynamoDBConfig dynamo) {
+public record AppConfig(String origin, CryptoConfig crypto, DynamoDBConfig dynamo) {
 }

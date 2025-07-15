@@ -16,7 +16,7 @@
                       "id": { "S": "3" },
                       "name": { "S": "Patata" },
                       "unit": { "S": "g" },
-                      "quantity": { "N": "500" }
+                      "value": { "N": "500" }
                     }
                   },
                   {
@@ -24,7 +24,7 @@
                       "id": { "S": "4" },
                       "name": { "S": "Huevo" },
                       "unit": { "S": "unidad" },
-                      "quantity": { "N": "4" }
+                      "value": { "N": "4" }
                     }
                   }
                 ]
@@ -37,7 +37,7 @@
                       "name": { "S": "Calorías" },
                       "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
-                      "quantity": { "N": "800" }
+                      "value": { "N": "800" }
                     }
                   }
                 ]
@@ -63,7 +63,7 @@
                       "id": { "S": "3" },
                       "name": { "S": "Patata" },
                       "unit": { "S": "g" },
-                      "quantity": { "N": "500" }
+                      "value": { "N": "500" }
                     }
                   },
                   {
@@ -71,7 +71,7 @@
                       "id": { "S": "4" },
                       "name": { "S": "Huevo" },
                       "unit": { "S": "unidad" },
-                      "quantity": { "N": "4" }
+                      "value": { "N": "4" }
                     }
                   },
                   {
@@ -80,7 +80,7 @@
                       "name": { "S": "Jamon" },
                       "recipe_id": { "S": "j" },
                       "unit": { "S": "g" },
-                      "quantity": { "N": "40" }
+                      "value": { "N": "40" }
                     }
                   }
                 ]
@@ -93,7 +93,7 @@
                       "name": { "S": "Calorías" },
                       "short_name": { "S": "cal" },
                       "unit": { "S": "kcal" },
-                      "quantity": { "N": "800" }
+                      "value": { "N": "800" }
                     }
                   }
                 ]

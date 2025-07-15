@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public record Menu(Date date, String username, Map<String, List<ItemValue>> products,
+public record Menu(Date date, String username, Map<String, List<ProductValue>> products,
                    Collection<NutritionalValue> nutritionalValues) {
 
-    public static Menu build(final MenuRequest menuRequest, final Map<String, List<ItemValue>> menus,
+    public static Menu build(final MenuRequest menuRequest, final Map<String, List<ProductValue>> menus,
                              final Collection<NutritionalValue> nutritionalValues) {
         return new Menu(menuRequest.date(), menuRequest.username(), menus, nutritionalValues);
     }

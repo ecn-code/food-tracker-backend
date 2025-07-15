@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public record Recipe(String id, String name, String description,
-                     List<ItemValue> products, Collection<NutritionalValue> nutritionalValues) {
+                     List<ProductValue> products, Collection<NutritionalValue> nutritionalValues) {
 
     public String id() {
         if (StringUtils.hasText(id)) {
@@ -18,7 +18,7 @@ public record Recipe(String id, String name, String description,
         return IdFormat.createId();
     }
 
-    public static Recipe build(final RecipeRequest recipeRequest, final List<ItemValue> products,
+    public static Recipe build(final RecipeRequest recipeRequest, final List<ProductValue> products,
                                final Collection<NutritionalValue> nutritionalValues) {
         return new Recipe(recipeRequest.id(), recipeRequest.name(), recipeRequest.description(),
                 products, nutritionalValues);

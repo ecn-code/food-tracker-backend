@@ -6,6 +6,7 @@ import com.eliascanalesnieto.foodtracker.entity.old.NutritionalValueOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.ProductOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.RecipeOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.SettingsV1OldDynamo;
+import com.eliascanalesnieto.foodtracker.entity.old.UnitOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.UserOldDynamo;
 import com.eliascanalesnieto.foodtracker.entity.old.WeeklyOldDynamo;
 import com.eliascanalesnieto.foodtracker.service.HashService;
@@ -38,12 +39,47 @@ public class MigrationRepository {
     private final DynamoClient dynamoClient;
     private final AppConfig appConfig;
     private final HashService hashService;
-    private final ProductRepository productRepository;
-    private final RecipeRepository recipeRepository;
     private final NutritionalInformationRepository nutritionalInformationRepository;
 
     private final Map<String, ProductDynamo> migratedProducts = new HashMap<>();
     private final Map<String, RecipeDynamo> migratedRecipes = new HashMap<>();
+
+    public void migrateUnits() {
+        log.debug("Migrating Units");
+        final DynamoDbTable<UnitDynamo> table = dynamoClient.createTable(UnitDynamo.TABLE_SCHEMA);
+        if (exist(UnitDynamo.KEY, table)) {
+            log.debug("Not possible to migrate Units because they exist");
+            print(UnitDynamo.KEY, table);
+            return;
+        }
+
+        final DynamoDbTable<UnitOldDynamo> oldTable = dynamoClient.createTable(appConfig.dynamo().oldTableName(), UnitOldDynamo.TABLE_SCHEMA);
+
+        Key key = Key.builder()
+                .partitionValue("unit")
+                .build();
+
+        PageIterable<UnitOldDynamo> results = oldTable.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
+        results.stream().forEach(page -> {
+            for (UnitOldDynamo unitOldDynamo : page.items()) {
+
+                final UnitDynamo unitDynamo = new UnitDynamo();
+                unitDynamo.setId(IdFormat.createId());
+                unitDynamo.setType(UnitDynamo.KEY.partitionKeyValue().s());
+
+                final UnitDataDynamo unitDataDynamo = new UnitDataDynamo();
+                unitDynamo.setData(unitDataDynamo);
+                unitDataDynamo.setName(unitOldDynamo.getName());
+                unitDataDynamo.setShortName(unitOldDynamo.getSk());
+                unitDataDynamo.setShortName(unitOldDynamo.getShortName());
+
+                table.putItem(unitDynamo);
+
+                log.debug("Migrating unit " + unitDynamo);
+            }
+        });
+        log.debug("Units migrated");
+    }
 
     public void migrateProductsAndRecipes() {
         migrateProductsPrivate();
@@ -71,7 +107,7 @@ public class MigrationRepository {
                 productValue.setUnit("g");
                 productValue.setRecipeId(productDynamo.getData().getRecipeId());
                 if (StringUtils.hasText(productValue.getRecipeId())) {
-                    productValue.setUnit(productValue.getQuantity() > 1 ? "portions" : "portion");
+                    productValue.setUnit(productValue.getValue() > 1 ? "portions" : "portion");
                 }
             }
         }
@@ -105,7 +141,7 @@ public class MigrationRepository {
         PageIterable<ProductOldDynamo> results = oldTable.query(r -> r.queryConditional(QueryConditional.keyEqualTo(key)));
         results.stream().forEach(page -> {
             for (ProductOldDynamo productOld : page.items()) {
-                log.debug("Migrating from: " + productOld);
+                log.debug("Migrating product from: " + productOld);
 
                 final ProductDynamo productDynamo = new ProductDynamo();
                 productDynamo.setId(IdFormat.createId());
@@ -116,7 +152,7 @@ public class MigrationRepository {
                 productDataDynamo.setNutritionalValues(getNutritionalValues(productOld.getNutritionalValues()));
                 productDynamo.setData(productDataDynamo);
 
-                log.debug("Migrating to: " + productDynamo);
+                log.debug("Migrating product to: " + productDynamo);
                 migratedProducts.put(productDynamo.getData().getName().toLowerCase(), productDynamo);
             }
         });
@@ -243,10 +279,10 @@ public class MigrationRepository {
                             productValueDynamo.setId(productDynamo.getId());
                             productValueDynamo.setUnit("g");
                             productValueDynamo.setName(productDynamo.getData().getName());
-                            productValueDynamo.setQuantity(product.get("value").asDouble());
+                            productValueDynamo.setValue(product.get("value").asDouble());
                             productValueDynamo.setRecipeId(productDynamo.getData().getRecipeId());
                             if (StringUtils.hasText(productValueDynamo.getRecipeId())) {
-                                productValueDynamo.setUnit(productValueDynamo.getQuantity() > 1 ? "portions" : "portion");
+                                productValueDynamo.setUnit(productValueDynamo.getValue() > 1 ? "portions" : "portion");
                             }
                             productValueDynamos.add(productValueDynamo);
                         }
@@ -360,10 +396,10 @@ public class MigrationRepository {
             final NutritionalInformationDynamo nutritionalInformationDynamo;
             if (nv.has("name")) {
                 nutritionalInformationDynamo = nutritionalInfoByShortName.get(nv.get("name").asText().toLowerCase());
-                nutritionalValueDynamo.setQuantity(nv.get("value").asDouble());
+                nutritionalValueDynamo.setValue(nv.get("value").asDouble());
             } else {
                 nutritionalInformationDynamo = nutritionalInfoByShortName.get(nv.get(0).asText().toLowerCase());
-                nutritionalValueDynamo.setQuantity(nv.get(2).asDouble());
+                nutritionalValueDynamo.setValue(nv.get(2).asDouble());
             }
             nutritionalValueDynamo.setId(nutritionalInformationDynamo.getId());
             nutritionalValueDynamo.setUnit(nutritionalInformationDynamo.getData().getUnit());
@@ -380,7 +416,7 @@ public class MigrationRepository {
         for (JsonNode product : products) {
             final ProductValueDynamo productValueDynamo = new ProductValueDynamo();
             productValueDynamo.setName(product.get(0).asText().toLowerCase());
-            productValueDynamo.setQuantity(product.get(2).asDouble());
+            productValueDynamo.setValue(product.get(2).asDouble());
             productValueDynamos.add(productValueDynamo);
         }
 

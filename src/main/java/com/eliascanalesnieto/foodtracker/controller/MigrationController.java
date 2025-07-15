@@ -19,6 +19,7 @@ public class MigrationController {
     public void migrate() {
         migrationRepository.migrateUsers();
         migrationRepository.migrateSettings();
+        migrationRepository.migrateUnits();
         migrationRepository.migrateNutritionalValue();
         migrationRepository.migrateProductsAndRecipes();
         migrationRepository.migrateWeeklyMenus();

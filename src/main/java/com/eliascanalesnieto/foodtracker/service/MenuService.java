@@ -9,7 +9,7 @@ import com.eliascanalesnieto.foodtracker.entity.MenuDynamo;
 import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
-import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.ProductValue;
 import com.eliascanalesnieto.foodtracker.model.Menu;
 import com.eliascanalesnieto.foodtracker.model.NutritionalValue;
 import com.eliascanalesnieto.foodtracker.repository.MenuRepository;
@@ -79,21 +79,21 @@ public class MenuService {
                                 e -> e.getValue() != null
                                         ? e.getValue().stream()
                                         .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(),
-                                                iv.getDescription(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
+                                                iv.getDescription(), iv.getRecipeId(), iv.getUnit(), iv.getValue()))
                                         .collect(Collectors.toList())
                                         : null
                         ))
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getShortName(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getShortName(), iv.getUnit(), iv.getValue()))
                         .collect(Collectors.toList())
                         : null
         );
     }
 
     private Menu getMenuWithNutritionalValues(final MenuRequest menuRequest) {
-        final Map<String, List<ItemValue>> menus = menuRequest.products().entrySet()
+        final Map<String, List<ProductValue>> menus = menuRequest.products().entrySet()
                 .stream()
                 .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), getProducts(entry.getValue())))
                 .collect(
@@ -108,9 +108,9 @@ public class MenuService {
         return Menu.build(menuRequest, menus, nutritionalValues);
     }
 
-    private List<ItemValue> getProducts(final List<ProductValueRequest> productValueRequests) {
+    private List<ProductValue> getProducts(final List<ProductValueRequest> productValueRequests) {
         return productValueRequests.stream()
-                .map(productValueRequest -> ItemValue.buildFromProductValue(
+                .map(productValueRequest -> ProductValue.buildFromProductValue(
                         getProduct(productValueRequest),
                         productValueRequest.value()
                 )).toList();

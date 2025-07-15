@@ -5,8 +5,9 @@ import com.eliascanalesnieto.foodtracker.config.MockConfig;
 import com.eliascanalesnieto.foodtracker.dto.in.NutritionalValueRequest;
 import com.eliascanalesnieto.foodtracker.dto.in.ProductRequest;
 import com.eliascanalesnieto.foodtracker.dto.out.ErrorResponse;
-import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
 import com.eliascanalesnieto.foodtracker.dto.out.LoginResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.NutritionalValueResponse;
+import com.eliascanalesnieto.foodtracker.dto.out.PaginatedList;
 import com.eliascanalesnieto.foodtracker.dto.out.ProductResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,24 +45,27 @@ class ProductControllerTest {
 
     @Test
     void getAll() {
-        ResponseEntity<List<ProductResponse>> response = testRestTemplate.exchange(
-                RECIPES,
+        ResponseEntity<PaginatedList<ProductResponse>> response = testRestTemplate.exchange(
+                RECIPES + "?items_per_page={items_per_page}",
                 HttpMethod.GET,
                 login(),
-                new ParameterizedTypeReference<>() {
-                }
+                new ParameterizedTypeReference<>() {},
+                Map.of("items_per_page", 20)
         );
 
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertThat(response.getBody())
                 .usingRecursiveComparison()
                 .isEqualTo(
-                        List.of(
-                                getProduct1(),
-                                getProduct2(),
-                                getProduct3(),
-                                getProduct4(),
-                                getProduct5()
+                        new PaginatedList<>(
+                                List.of(
+                                        getProduct4(),
+                                        getProduct5(),
+                                        getProduct1(),
+                                        getProduct2(),
+                                        getProduct3()
+                                ),
+                                null
                         )
                 );
     }
@@ -112,7 +117,7 @@ class ProductControllerTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new ProductResponse(null, "name", "desc", "",
-                        List.of(new NutritionalValueResponse("1", "ni", "g", "k",3d))));
+                        List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 3d))));
 
         testRestTemplate.exchange(
                 RECIPES + "/" + response.getBody().id(),
@@ -170,7 +175,7 @@ class ProductControllerTest {
                 HttpMethod.PUT,
                 login(new ProductRequest(product.id(), product.name() + "-m", product.description(), product.recipeId(),
                         product.nutritionalValues().stream()
-                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.shortName(), i.unit(), i.value()))
+                                .map(i -> new NutritionalValueRequest(i.id(), i.value()))
                                 .toList())),
                 new ParameterizedTypeReference<>() {
                 }
@@ -186,7 +191,7 @@ class ProductControllerTest {
                 HttpMethod.PUT,
                 login(new ProductRequest(product.id(), product.name(), product.description(), product.recipeId(),
                         product.nutritionalValues().stream()
-                                .map(i -> new NutritionalValueRequest(i.id(), i.name(), i.shortName(), i.unit(), i.value()))
+                                .map(i -> new NutritionalValueRequest(i.id(), i.value()))
                                 .toList())),
                 new ParameterizedTypeReference<>() {
                 }
@@ -269,32 +274,32 @@ class ProductControllerTest {
 
     private static ProductResponse getProduct2() {
         return new ProductResponse("2", "Pan", "Pan integral", "1",
-                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",250d)));
+                List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 250d)));
     }
 
     private static ProductResponse getProduct1() {
         return new ProductResponse("1", "Leche", "Leche entera de vaca", null,
-                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",60d)));
+                List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 60d)));
     }
 
     private static ProductResponse getProduct3() {
         return new ProductResponse("3", "Patata", "Patata integral", null,
-                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",50d)));
+                List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 50d)));
     }
 
     private static ProductResponse getProduct4() {
         return new ProductResponse("4", "Huevo", null, "2",
-                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",20d)));
+                List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 20d)));
     }
 
     private static ProductResponse getProduct5() {
         return new ProductResponse("5", "Jamon", null, "1",
-                List.of(new NutritionalValueResponse("1", "Calorías", "cal", "kcal",750d)));
+                List.of(new NutritionalValueResponse("1", "Kilocaloría", "kcal", "k", 750d)));
     }
 
     private static ProductRequest getProductRequest(final String id, final String name) {
         final String description = "desc";
-        final List<NutritionalValueRequest> nutritionalValues = List.of(new NutritionalValueRequest("1", "ni", "g", "k",3d));
+        final List<NutritionalValueRequest> nutritionalValues = List.of(new NutritionalValueRequest("1", 3d));
 
         return new ProductRequest(id, name, description, "", nutritionalValues);
     }

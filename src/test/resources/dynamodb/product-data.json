@@ -5,6 +5,7 @@
         "Item": {
           "PK": { "S": "PRODUCT_V2" },
           "SK": { "S": "1" },
+          "order_by": { "S": "Leche" },
           "additional_data": {
             "M": {
               "name": { "S": "Leche" },
@@ -14,10 +15,10 @@
                   {
                     "M": {
                       "id": { "S": "1" },
-                      "name": { "S": "Calorías" },
-                      "short_name": { "S": "cal" },
-                      "unit": { "S": "kcal" },
-                      "quantity": { "N": "60" }
+                      "name": { "S": "Kilocaloría" },
+                      "short_name": { "S": "kcal" },
+                      "unit": { "S": "k" },
+                      "value": { "N": "60" }
                     }
                   }
                 ]
@@ -32,6 +33,7 @@
         "Item": {
           "PK": { "S": "PRODUCT_V2" },
           "SK": { "S": "2" },
+          "order_by": { "S": "Pan" },
           "additional_data": {
             "M": {
               "name": { "S": "Pan" },
@@ -42,10 +44,10 @@
                   {
                     "M": {
                       "id": { "S": "1" },
-                      "name": { "S": "Calorías" },
-                      "short_name": { "S": "cal" },
-                      "unit": { "S": "kcal" },
-                      "quantity": { "N": "250" }
+                      "name": { "S": "Kilocaloría" },
+                      "short_name": { "S": "kcal" },
+                      "unit": { "S": "k" },
+                      "value": { "N": "250" }
                     }
                   }
                 ]
@@ -60,6 +62,7 @@
         "Item": {
           "PK": { "S": "PRODUCT_V2" },
           "SK": { "S": "3" },
+          "order_by": { "S": "Patata" },
           "additional_data": {
             "M": {
               "name": { "S": "Patata" },
@@ -69,10 +72,10 @@
                   {
                     "M": {
                       "id": { "S": "1" },
-                      "name": { "S": "Calorías" },
-                      "short_name": { "S": "cal" },
-                      "unit": { "S": "kcal" },
-                      "quantity": { "N": "50" }
+                      "name": { "S": "Kilocaloría" },
+                      "short_name": { "S": "kcal" },
+                      "unit": { "S": "k" },
+                      "value": { "N": "50" }
                     }
                   }
                 ]
@@ -87,6 +90,7 @@
         "Item": {
           "PK": { "S": "PRODUCT_V2" },
           "SK": { "S": "4" },
+          "order_by": { "S": "Huevo" },
           "additional_data": {
             "M": {
               "name": { "S": "Huevo" },
@@ -96,10 +100,10 @@
                   {
                     "M": {
                       "id": { "S": "1" },
-                      "name": { "S": "Calorías" },
-                      "short_name": { "S": "cal" },
-                      "unit": { "S": "kcal" },
-                      "quantity": { "N": "20" }
+                      "name": { "S": "Kilocaloría" },
+                      "short_name": { "S": "kcal" },
+                      "unit": { "S": "k" },
+                      "value": { "N": "20" }
                     }
                   }
                 ]
@@ -114,6 +118,7 @@
         "Item": {
           "PK": { "S": "PRODUCT_V2" },
           "SK": { "S": "5" },
+          "order_by": { "S": "Jamon" },
           "additional_data": {
             "M": {
               "name": { "S": "Jamon" },
@@ -123,10 +128,10 @@
                   {
                     "M": {
                       "id": { "S": "1" },
-                      "name": { "S": "Calorías" },
-                      "short_name": { "S": "cal" },
-                      "unit": { "S": "kcal" },
-                      "quantity": { "N": "750" }
+                      "name": { "S": "Kilocaloría" },
+                      "short_name": { "S": "kcal" },
+                      "unit": { "S": "k" },
+                      "value": { "N": "750" }
                     }
                   }
                 ]

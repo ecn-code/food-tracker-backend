@@ -1,6 +1,6 @@
 package com.eliascanalesnieto.foodtracker.entity;
 
-import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.ProductValue;
 import lombok.Setter;
 import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
@@ -16,7 +16,7 @@ public class ProductValueDynamo {
     private String name;
     private String description;
     private String recipeId;
-    private Double quantity;
+    private Double value;
 
     @DynamoDbAttribute("id")
     public String getId() {
@@ -28,9 +28,9 @@ public class ProductValueDynamo {
         return name;
     }
 
-    @DynamoDbAttribute("quantity")
-    public Double getQuantity() {
-        return quantity;
+    @DynamoDbAttribute("value")
+    public Double getValue() {
+        return value;
     }
 
     @DynamoDbAttribute("unit")
@@ -48,14 +48,14 @@ public class ProductValueDynamo {
         return description;
     }
 
-    public static ProductValueDynamo build(final ItemValue itemValue) {
+    public static ProductValueDynamo build(final ProductValue productValue) {
         ProductValueDynamo d = new ProductValueDynamo();
-        d.setId(itemValue.id());
-        d.setName(itemValue.name());
-        d.setDescription(itemValue.description());
-        d.setRecipeId(itemValue.recipeId());
-        d.setUnit(itemValue.unit());
-        d.setQuantity(itemValue.value());
+        d.setId(productValue.id());
+        d.setName(productValue.name());
+        d.setDescription(productValue.description());
+        d.setRecipeId(productValue.recipeId());
+        d.setUnit(productValue.unit());
+        d.setValue(productValue.value());
         return d;
     }
 }

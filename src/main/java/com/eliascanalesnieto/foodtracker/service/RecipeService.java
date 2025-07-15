@@ -9,7 +9,7 @@ import com.eliascanalesnieto.foodtracker.entity.ProductDynamo;
 import com.eliascanalesnieto.foodtracker.entity.RecipeDynamo;
 import com.eliascanalesnieto.foodtracker.exception.EntityNotFoundException;
 import com.eliascanalesnieto.foodtracker.exception.UnprocessableContent;
-import com.eliascanalesnieto.foodtracker.model.ItemValue;
+import com.eliascanalesnieto.foodtracker.model.ProductValue;
 import com.eliascanalesnieto.foodtracker.model.NutritionalValue;
 import com.eliascanalesnieto.foodtracker.model.Recipe;
 import com.eliascanalesnieto.foodtracker.repository.ProductRepository;
@@ -71,21 +71,21 @@ public class RecipeService {
                 data.getDescription(),
                 data.getProducts() != null
                         ? data.getProducts().stream()
-                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(), iv.getDescription(), iv.getRecipeId(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new ProductValueResponse(iv.getId(), iv.getName(), iv.getDescription(), iv.getRecipeId(), iv.getUnit(), iv.getValue()))
                         .collect(Collectors.toList())
                         : null,
                 data.getNutritionalValues() != null
                         ? data.getNutritionalValues().stream()
-                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getShortName(), iv.getUnit(), iv.getQuantity()))
+                        .map(iv -> new NutritionalValueResponse(iv.getId(), iv.getName(), iv.getShortName(), iv.getUnit(), iv.getValue()))
                         .collect(Collectors.toList())
                         : null
         );
     }
 
     private Recipe getRecipeWithNutritionalValues(final RecipeRequest recipeRequest) {
-        final List<ItemValue> products = recipeRequest.products().stream()
+        final List<ProductValue> products = recipeRequest.products().stream()
                 .map(productValueRequest ->
-                        ItemValue.buildFromProductValue(getProduct(productValueRequest), productValueRequest.value())
+                        ProductValue.buildFromProductValue(getProduct(productValueRequest), productValueRequest.value())
                 ).toList();
 
         final Collection<NutritionalValue> nutritionalValues = NutritionalValueCalculator.mergeList(products);
